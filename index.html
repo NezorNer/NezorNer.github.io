@@ -82,11 +82,14 @@
     a:hover {
       text-decoration: underline;
     }
-    .sidebar img {
+    .sidebar svg {
       transition: box-shadow 0.5s ease-in-out;
+      border-radius: 10px;
+      background: transparent;
     }
-    .sidebar img:hover {
+    .sidebar svg:hover {
       box-shadow: 0 4px 20px #BAC0DE;
+      background: transparent;
     }
   </style>
 </head>
@@ -97,14 +100,15 @@
   <div id="video-overlay"></div>
   
   <div class="sidebar">
-    <a href="https://github.com/NezorNer">
-      <img src="logos/github-mark.png" alt="GitHub" width="40" height="40">
+    <a href="https://github.com/NezorNer" aria-label="GitHub">
+      <!-- Самодельная SVG-иконка -->
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" stroke="#BAC0DE" stroke-width="4" fill="#232946"/>
+        <path d="M20 12c-3 0-5 2.5-5 5.5 0 2 1.5 4 2.5 4.5s-.5 1.5-.5 1.5c0 1 .5 1.5 1.5 1.5h4c1 0 1.5-.5 1.5-1.5 0 0-.5-1-0.5-1.5s2.5-2.5 2.5-4.5c0-3-2-5.5-5-5.5z" fill="#BAC0DE"/>
+        <circle cx="16.5" cy="18.5" r="0.8" fill="#000"/>
+        <circle cx="23.5" cy="18.5" r="0.8" fill="#000"/>
+      </svg>
     </a>
   </div>
   <div class="container">
-    <h1>Hello, I'm Meosssy!</h1>
-    <p>Это моя личная страница на GitHub Pages.</p>
-    <p>Здесь можно разместить краткую информацию о себе, ссылки на соцсети, проекты и многое другое.</p>
-  </div>
-</body>
-</html>
+    <h1>Hello, I'm
