@@ -10,23 +10,59 @@
       font-weight: bold;
       font-style: normal;
     }
-    body { font-family: 'TerminusTTF-Bold', Arial, sans-serif; background: #12263A; margin: 0; padding: 0;}
-    .container { max-width: 700px; margin: 40px auto; background: #4A4A67; padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px #4A4A67, 0 -8px 20px #4A4A67;}
-    h1 { color: #000; }
-    p { color: #BAC0DE; }
-    a { color: #0466c8; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    body {
+      font-family: 'TerminusTTF-Bold', Arial, sans-serif;
+      background: #12263A;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      margin-right: 100px;
+      background: #4A4A67;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px #4A4A67, 0 -8px 20px #4A4A67;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 100vh;
+      background: #4A4A67;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+      color: #000;
+    }
+    p {
+      color: #BAC0DE;
+    }
+    a {
+      color: #0466c8;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
+  <div class="sidebar">
+    <a href="https://github.com/NezorNer">
+      <img src="logos/github-mark.png" alt="GitHub" width="40" height="40">
+    </a>
+  </div>
   <div class="container">
-    <h1>Привет, я [Твоё имя]!</h1>
+    <h1>Hello, I'm Meosssy!</h1>
     <p>Это моя личная страница на GitHub Pages.</p>
     <p>Здесь можно разместить краткую информацию о себе, ссылки на соцсети, проекты и многое другое.</p>
-    <p>
-      <a href="https://github.com/NezorNer"><img src="logos/github-mark.png" alt="GitHub" width="40" height="40"></a>
-    </p>
   </div>
 </body>
 </html>
-
