@@ -36,22 +36,25 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.80);
+      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0, 0, 0, 0.75);
       z-index: -1;
     }
     .container {
       max-width: 700px;
-      margin: 40px auto;
-      margin-left: auto;
-      margin-right: auto;
+      width: 100%;
       background: rgba(74, 74, 103, 0.6);
       backdrop-filter: blur(12px);
       padding: 30px;
       border-radius: 18px;
       box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-      position: relative;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
       z-index: 1;
     }
+
     .sidebar {
       position: fixed;
       top: 20px;
@@ -106,55 +109,5 @@
     <p>Это моя личная страница на GitHub Pages.</p>
     <p>Здесь можно разместить краткую информацию о себе, ссылки на соцсети, проекты и многое другое.</p>
   </div>
-<script>
-document.addEventListener('mousemove', e => {
-  const intensity = 18;
-  const duration = 250;
-
-  // Функция определяет, есть ли внутри элемента тег <video>
-  function containsVideoTag(el) {
-    return el && (el.tagName === "VIDEO" ||
-      el.id === "background-video" ||
-      el.id === "video-overlay" ||
-      el.classList?.contains("background-video") ||
-      (el.querySelector && el.querySelector("video")));
-  }
-
-  const glitchTargets = document.elementsFromPoint(e.clientX, e.clientY)
-   .filter(x =>
-     x !== document.body &&
-     x.style &&
-     !containsVideoTag(x) &&          // игнорируем любые элементы, содержащие <video>
-     !containsVideoTag(x.parentElement) // и их ближайших родителей
-   );
-
-  glitchTargets.forEach(target => {
-    if (!target._glitchOriginal) {
-      target._glitchOriginal = {
-        transform: target.style.transform,
-        transition: target.style.transition,
-      };
-      const angle = Math.random() * 2 * Math.PI;
-      target.style.transition = 'transform 0.09s cubic-bezier(.5,-0.5,.4,1.8)';
-      target.style.transform = `translate(${Math.cos(angle)*intensity}px,${Math.sin(angle)*intensity}px) scale(0.98)`;
-    }
-  });
-
-  setTimeout(() => {
-    glitchTargets.forEach(target => {
-      if (target._glitchOriginal) {
-        target.style.transform = target._glitchOriginal.transform;
-        target.style.transition = target._glitchOriginal.transition;
-        delete target._glitchOriginal;
-      }
-    });
-  }, duration);
-});
-</script>
 </body>
 </html>
-
-
-
-
-
