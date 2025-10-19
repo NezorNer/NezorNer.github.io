@@ -108,12 +108,18 @@
   </div>
 <script>
 document.addEventListener('mousemove', e => {
-  const radius = 60;
   const intensity = 18;
   const duration = 250;
-  
+
+  // Выбираем только элементы, не являющиеся видео, видео-overlay, <body>
   const glitchTargets = document.elementsFromPoint(e.clientX, e.clientY)
-   .filter(x => x !== document.body && x.style && x.id !== "video-overlay");
+   .filter(x =>
+     x !== document.body &&
+     x.style &&
+     x.id !== "video-overlay" && // не видео-overlay
+     x.tagName !== "VIDEO" &&    // не <video>
+     !x.classList.contains("background-video") // если есть такой класс
+   );
   glitchTargets.forEach(target => {
     if (!target._glitchOriginal) {
       target._glitchOriginal = {
@@ -138,5 +144,6 @@ document.addEventListener('mousemove', e => {
 </script>
 </body>
 </html>
+
 
 
