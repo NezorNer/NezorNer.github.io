@@ -33,23 +33,30 @@
       background: rgba(0, 0, 0, 0.75);
       z-index: -1;
     }
-    .container {
-      max-width: 700px;
-      width: 100%;
-      background: rgba(74, 74, 103, 0.6);
-      backdrop-filter: blur(12px);
-      padding: 30px;
-      border: 6px solid;
-      border-radius: 30px;
-      border-image: linear-gradient(to bottom, #009EFF, #8000FF) 1;
-      overflow: hidden;             /* добавь это для скругления рамки */
-      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+    .gradient-border {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%,-50%);
-      z-index: 1;
+      padding: 3px; /* ширина рамки */
+      border-radius: 18px;
+      background: linear-gradient(to bottom, #009EFF, #8000FF);
+      width: fit-content;
+      height: fit-content;
+    }
+
+    .container {
+      border-radius: 18px;
+      background: rgba(74, 74, 103, 0.6);
+      backdrop-filter: blur(12px);
+      padding: 30px;
       color: #BAC0DE;
+      width: 700px;
+      max-width: 90vw;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
     }
     h1 {
       color: #BAC0DE;
@@ -78,5 +85,6 @@
   </div>
 </body>
 </html>
+
 
 
