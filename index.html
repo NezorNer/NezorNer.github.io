@@ -107,46 +107,25 @@
     <p>Здесь можно разместить краткую информацию о себе, ссылки на соцсети, проекты и многое другое.</p>
   </div>
 <script>
-// Глитч-трейл за курсором
-const glitchTrails = [];
 document.addEventListener('mousemove', e => {
-  const radius = 60; // радиус эффекта
-  const intensity = 18; // величина смещения
-  const duration = 250; // время жизни глитча (мс)
-  const el = document.createElement('div');
-  el.style.position = 'fixed';
-  el.style.left = (e.clientX-radius)+'px';
-  el.style.top = (e.clientY-radius)+'px';
-  el.style.pointerEvents = 'none';
-  el.style.width = (radius*2)+'px';
-  el.style.height = (radius*2)+'px';
-  el.style.zIndex = 2000;
-  el.style.mixBlendMode = 'difference';
-  el.style.borderRadius = '50%';
-  el.style.boxShadow = `0 0 80px #0ff6, 0 0 24px #ff0c`;
-  el.style.background = 'rgba(30,44,86,0.07)';
-  el.className = 'glitch-cursor-trail';
-
-  // Сдвиг элементов
+  const radius = 60;
+  const intensity = 18;
+  const duration = 250;
+  
   const glitchTargets = document.elementsFromPoint(e.clientX, e.clientY)
-    .filter(x => x !== el && x !== document.body && x.style);
+   .filter(x => x !== document.body && x.style && x.id !== "video-overlay");
   glitchTargets.forEach(target => {
     if (!target._glitchOriginal) {
       target._glitchOriginal = {
         transform: target.style.transform,
         transition: target.style.transition,
       };
-      const angle = Math.random()*2*Math.PI;
+      const angle = Math.random() * 2 * Math.PI;
       target.style.transition = 'transform 0.09s cubic-bezier(.5,-0.5,.4,1.8)';
       target.style.transform = `translate(${Math.cos(angle)*intensity}px,${Math.sin(angle)*intensity}px) scale(0.98)`;
     }
   });
-
-  document.body.append(el);
-  glitchTrails.push({el, targets: glitchTargets});
-
   setTimeout(() => {
-    el.remove();
     glitchTargets.forEach(target => {
       if (target._glitchOriginal) {
         target.style.transform = target._glitchOriginal.transform;
@@ -157,7 +136,7 @@ document.addEventListener('mousemove', e => {
   }, duration);
 });
 </script>
-
 </body>
 </html>
+
 
