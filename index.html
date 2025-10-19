@@ -1,25 +1,18 @@
-@@ -1,110 +1,110 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/jpeg" href="logos/LOGO.jpg">
-  <title>Meosssy page!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meosssy's Page</title>
   <style>
-    @font-face {
-      font-family: 'TerminusTTF-Bold';
-      src: url('fonts/TerminusTTF-Bold.ttf') format('truetype');
-      font-weight: bold;
-      font-style: normal;
-    }
-    body {
-      font-family: 'TerminusTTF-Bold', Arial, sans-serif;
-      background: #12263A;
+    * {
       margin: 0;
       padding: 0;
-      font-size: 20px;
-      position: relative;
-      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      overflow: hidden;
     }
     #background-video {
       position: fixed;
@@ -46,33 +39,19 @@
       background: rgba(74, 74, 103, 0.6);
       backdrop-filter: blur(12px);
       padding: 30px;
+      border: 3px solid;
       border-radius: 18px;
+      border-image: linear-gradient(to bottom, #009EFF, #8000FF) 1;
       box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%,-50%);
       z-index: 1;
-    }
-
-    .sidebar {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 60px;
-      height: calc(100vh - 40px);
-      background: rgba(74, 74, 103, 0.6);
-      backdrop-filter: blur(12px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 20px;
-      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-      border-radius: 18px;
-      z-index: 1;
+      color: #BAC0DE;
     }
     h1 {
-      color: #000;
+      color: #BAC0DE;
       font-size: 38px;
       text-align: center;
     }
@@ -86,12 +65,6 @@
     a:hover {
       text-decoration: underline;
     }
-    .sidebar img {
-      transition: filter 0.5s ease-in-out;
-    }
-    .sidebar img:hover {
-      filter: drop-shadow(0 4px 20px #BAC0DE);
-    }
   </style>
 </head>
 <body>
@@ -99,15 +72,9 @@
     <source src="videos/abstract-purple-topo.1920x1080.mp4" type="video/mp4">
   </video>
   <div id="video-overlay"></div>
-  <div class="sidebar">
-    <a href="https://github.com/NezorNer">
-      <img src="logos/FreeSample-Vectorizer-io-github-mark.svg" alt="GitHub" width="40" height="40">
-    </a>
-  </div>
   <div class="container">
     <h1>Hello, I'm Meosssy!</h1>
     <p>Это моя личная страница на GitHub Pages.</p>
-    <p>Здесь можно разместить краткую информацию о себе, ссылки на соцсети, проекты и многое другое.</p>
   </div>
 </body>
 </html>
