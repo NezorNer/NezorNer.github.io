@@ -110,15 +110,24 @@
 document.addEventListener('mousemove', e => {
   const intensity = 18;
   const duration = 250;
+
+  // Функция определяет, есть ли внутри элемента тег <video>
+  function containsVideoTag(el) {
+    return el && (el.tagName === "VIDEO" ||
+      el.id === "background-video" ||
+      el.id === "video-overlay" ||
+      el.classList?.contains("background-video") ||
+      (el.querySelector && el.querySelector("video")));
+  }
+
   const glitchTargets = document.elementsFromPoint(e.clientX, e.clientY)
    .filter(x =>
      x !== document.body &&
      x.style &&
-     x.id !== "video-overlay" &&
-     x.id !== "background-video" &&
-     x.tagName !== "VIDEO" &&
-     !x.classList.contains("background-video")
+     !containsVideoTag(x) &&          // игнорируем любые элементы, содержащие <video>
+     !containsVideoTag(x.parentElement) // и их ближайших родителей
    );
+
   glitchTargets.forEach(target => {
     if (!target._glitchOriginal) {
       target._glitchOriginal = {
@@ -130,6 +139,7 @@ document.addEventListener('mousemove', e => {
       target.style.transform = `translate(${Math.cos(angle)*intensity}px,${Math.sin(angle)*intensity}px) scale(0.98)`;
     }
   });
+
   setTimeout(() => {
     glitchTargets.forEach(target => {
       if (target._glitchOriginal) {
@@ -143,6 +153,7 @@ document.addEventListener('mousemove', e => {
 </script>
 </body>
 </html>
+
 
 
 
