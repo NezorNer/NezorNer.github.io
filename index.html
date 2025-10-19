@@ -24,15 +24,15 @@
       object-fit: cover;
     }
     
-    #video-overlay {
+    #crash-video {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.45);
-      background: rgba(0, 0, 0, 0.75);
-      z-index: -1;
+      z-index: -3;
+      object-fit: cover;
+      pointer-events: none;
     }
     
     .container {
@@ -147,13 +147,9 @@
   </style>
 </head>
 <body>
-  <video id="crash-video" src="videos/crash out.mp4" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1000;object-fit:cover;" controls></video>
-  
   <video id="background-video" autoplay loop muted playsinline>
     <source src="videos/abstract-purple-topo.1920x1080.mp4" type="video/mp4">
   </video>
-  
-  <div id="video-overlay"></div>
   
   <div class="sidebar">
     <a href="https://github.com/NezorNer">
@@ -166,12 +162,14 @@
     <p>Это моя личная страница на GitHub Pages.</p>
     <p>Здесь можно разместить краткую информацию о себе, ссылки на соцсети, проекты и многое другое.</p>
   </div>
-
+  
+  <video id="crash-video" src="videos/crash out.mp4" autoplay loop muted playsinline></video>
+  
   <script>
     let lastActivity = Date.now();
     let afkTimer;
     let isTriggered = false;
-
+    
     function resetTimer() {
       if (!isTriggered) {
         lastActivity = Date.now();
@@ -179,31 +177,19 @@
         afkTimer = setTimeout(triggerCrashOut, 7000);
       }
     }
-
+    
     function triggerCrashOut() {
       if (isTriggered) return;
       isTriggered = true;
-
-      const crashVideo = document.getElementById('crash-video');
+      
       const container = document.querySelector('.container');
       const sidebar = document.querySelector('.sidebar');
-
-      // Показываем crash video
-      crashVideo.style.display = 'block';
-      crashVideo.muted = false;
-      crashVideo.play();
-
+      
       // Добавляем глитч эффект к боксам
       container.classList.add('glitch');
       sidebar.classList.add('glitch');
-
-      // Через небольшую задержку скрываем боксы
-      setTimeout(() => {
-        container.style.display = 'none';
-        sidebar.style.display = 'none';
-      }, 500);
     }
-
+    
     // Отслеживание активности пользователя
     document.addEventListener('mousemove', resetTimer);
     document.addEventListener('keypress', resetTimer);
@@ -211,7 +197,7 @@
     document.addEventListener('scroll', resetTimer);
     document.addEventListener('mousedown', resetTimer);
     document.addEventListener('touchstart', resetTimer);
-
+    
     // Запускаем таймер при загрузке страницы
     resetTimer();
   </script>
