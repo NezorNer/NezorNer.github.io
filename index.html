@@ -1,112 +1,113 @@
+@@ -1,110 +1,110 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<link rel="icon" type="image/jpeg" href="logos/LOGO.jpg">
-<title>Meosssy page!</title>
-<style>
-@font-face {
-font-family: 'TerminusTTF-Bold';
-src: url('fonts/TerminusTTF-Bold.ttf') format('truetype');
-font-weight: bold;
-font-style: normal;
-}
-body {
-font-family: 'TerminusTTF-Bold', Arial, sans-serif;
-background: #12263A;
-margin: 0;
-padding: 0;
-font-size: 20px;
-position: relative;
-overflow-x: hidden;
-}
-#background-video {
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-object-fit: cover;
-z-index: -2;
-}
-#video-overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-background: rgba(0, 0, 0, 0.45);
-background: rgba(0, 0, 0, 0.75);
-z-index: -1;
-}
-.container {
-max-width: 700px;
-margin: 40px auto;
-margin-left: auto;
-margin-right: auto;
-background: rgba(74, 74, 103, 0.6);
-backdrop-filter: blur(12px);
-padding: 30px;
-border-radius: 18px;
-box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-position: relative;
-z-index: 1;
-}
-.sidebar {
-position: fixed;
-top: 20px;
-right: 20px;
-width: 60px;
-height: calc(100vh - 40px);
-background: rgba(74, 74, 103, 0.6);
-backdrop-filter: blur(12px);
-display: flex;
-flex-direction: column;
-align-items: center;
-padding-top: 20px;
-box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-border-radius: 18px;
-z-index: 1;
-}
-h1 {
-color: #000;
-font-size: 38px;
-text-align: center;
-}
-p {
-color: #BAC0DE;
-}
-a {
-color: #0466c8;
-text-decoration: none;
-}
-a:hover {
-text-decoration: underline;
-}
-.sidebar img {
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/jpeg" href="logos/LOGO.jpg">
+  <title>Meosssy page!</title>
+  <style>
+    @font-face {
+      font-family: 'TerminusTTF-Bold';
+      src: url('fonts/TerminusTTF-Bold.ttf') format('truetype');
+      font-weight: bold;
+      font-style: normal;
+    }
+    body {
+      font-family: 'TerminusTTF-Bold', Arial, sans-serif;
+      background: #12263A;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    #background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+    }
+    #video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0, 0, 0, 0.75);
+      z-index: -1;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(74, 74, 103, 0.6);
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+    .sidebar {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 60px;
+      height: calc(100vh - 40px);
+      background: rgba(74, 74, 103, 0.6);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+      border-radius: 18px;
+      z-index: 1;
+    }
+    h1 {
+      color: #000;
+      font-size: 38px;
+      text-align: center;
+    }
+    p {
+      color: #BAC0DE;
+    }
+    a {
+      color: #0466c8;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .sidebar img {
       transition: box-shadow 0.5s ease-in-out;
       transition: filter 0.5s ease-in-out;
-}
-.sidebar img:hover {
+    }
+    .sidebar img:hover {
       box-shadow: 0 4px 20px #BAC0DE;
       filter: drop-shadow(0 4px 20px #BAC0DE);
-}
-</style>
+    }
+  </style>
 </head>
 <body>
-<video id="background-video" autoplay loop muted playsinline>
-<source src="videos/abstract-purple-topo.1920x1080.mp4" type="video/mp4">
-</video>
-<div id="video-overlay"></div>
-<div class="sidebar">
-<a href="https://github.com/NezorNer">
-<img src="logos/FreeSample-Vectorizer-io-github-mark.svg" alt="GitHub" width="40" height="40">
-</a>
-</div>
-<div class="container">
-<h1>Hello, I'm Meosssy!</h1>
-<p>Это моя личная страница на GitHub Pages.</p>
-<p>Здесь можно разместить краткую информацию о себе, ссылки на соцсети, проекты и многое другое.</p>
-</div>
+  <video id="background-video" autoplay loop muted playsinline>
+    <source src="videos/abstract-purple-topo.1920x1080.mp4" type="video/mp4">
+  </video>
+  <div id="video-overlay"></div>
+  <div class="sidebar">
+    <a href="https://github.com/NezorNer">
+      <img src="logos/FreeSample-Vectorizer-io-github-mark.svg" alt="GitHub" width="40" height="40">
+    </a>
+  </div>
+  <div class="container">
+    <h1>Hello, I'm Meosssy!</h1>
+    <p>Это моя личная страница на GitHub Pages.</p>
+    <p>Здесь можно разместить краткую информацию о себе, ссылки на соцсети, проекты и многое другое.</p>
+  </div>
 </body>
 </html>
