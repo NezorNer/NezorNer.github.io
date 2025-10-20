@@ -99,6 +99,26 @@
         display: none;
       }
     }
+    @media (orientation: landscape) {
+      #background-video,
+      #video-overlay {
+        display: none;
+      }
+      .container {
+        max-width: 100vw;
+        width: 100vw;
+        background: rgba(46, 44, 66, 1);
+        backdrop-filter: blur(12px);
+        border-radius: 0;
+        left: 0;
+        top: 0;
+        transform: none;
+        height: 100vh;
+      }
+      .container::before {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -111,5 +131,3 @@
   </div>
 </body>
 </html>
-
-
