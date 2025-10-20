@@ -79,6 +79,24 @@
     a:hover {
       text-decoration: underline;
     }
+    @media (max-width: 770px) {
+      #background-video,
+      #video-overlay {
+        display: none;
+      }
+      .container {
+        max-width: 100vw;
+        width: 100vw;
+        border-radius: 0;
+        left: 0;
+        top: 0;
+        transform: none;
+        height: 100vh;
+      }
+      .container::before {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -91,5 +109,3 @@
   </div>
 </body>
 </html>
-
-
