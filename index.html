@@ -29,15 +29,6 @@
       object-fit: cover;
       z-index: -2;
     }
-    #video-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.25);
-      z-index: -1;
-    }
     .container {
       max-width: 750px;
       width: 100%;
@@ -135,8 +126,7 @@
       font-family: Arial, sans-serif;
     }
     @media only screen and (max-width: 770px) {
-      #background-video,
-      #video-overlay {
+      #background-video {
         display: none;
       }
       .container {
@@ -155,8 +145,7 @@
       }
     }
     @media only screen and (orientation: landscape) and (pointer: coarse) {
-      #background-video,
-      #video-overlay {
+      #background-video {
         display: none;
       }
       .container {
@@ -180,7 +169,6 @@
   <video id="background-video" autoplay loop playsinline>
     <source src="videos/BITE ME ｜ MURDER DRONES EP 8 ｜ EDIT⧸AMV｜.mp4" type="video/mp4">
   </video>
-  <div id="video-overlay"></div>
   
   <div class="volume-control">
     <div class="volume-icon" id="volumeIcon">🔊</div>
