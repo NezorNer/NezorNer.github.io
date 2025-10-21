@@ -35,8 +35,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.45);
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.25);
       z-index: -1;
     }
     .container {
@@ -86,6 +85,55 @@
     a:hover {
       text-decoration: underline;
     }
+    .volume-control {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .volume-icon {
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .volume-slider {
+      width: 0;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      transition: width 0.2s;
+      overflow: hidden;
+    }
+    .volume-control:hover .volume-slider {
+      width: 80px;
+    }
+    .volume-slider-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: white;
+      width: 100%;
+      border-radius: 2px;
+    }
+    .credit-text {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      color: #cfcfcf;
+      font-size: 11px;
+      z-index: 1000;
+      font-family: Arial, sans-serif;
+    }
     @media only screen and (max-width: 770px) {
       #background-video,
       #video-overlay {
@@ -129,12 +177,52 @@
   </style>
 </head>
 <body>
-  <video id="background-video" autoplay loop muted playsinline>
-    <source src="videos/abstract-purple-topo.1920x1080.mp4" type="video/mp4">
+  <video id="background-video" autoplay loop playsinline>
+    <source src="videos/BITE ME ｜ MURDER DRONES EP 8 ｜ EDIT⧸AMV｜.mp4" type="video/mp4">
   </video>
   <div id="video-overlay"></div>
+  
+  <div class="volume-control">
+    <div class="volume-icon" id="volumeIcon">🔊</div>
+    <div class="volume-slider" id="volumeSlider">
+      <div class="volume-slider-fill" id="volumeFill"></div>
+    </div>
+  </div>
+  
+  <div class="credit-text">Edit by Suni on YT</div>
+  
   <div class="container">
     <h1>Hello, I'm Meosssy!</h1>
   </div>
+  
+  <script>
+    const video = document.getElementById('background-video');
+    const volumeIcon = document.getElementById('volumeIcon');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeFill = document.getElementById('volumeFill');
+    
+    video.volume = 1.0;
+    
+    volumeIcon.addEventListener('click', function() {
+      if (video.volume > 0) {
+        video.volume = 0;
+        volumeIcon.textContent = '🔇';
+        volumeFill.style.width = '0%';
+      } else {
+        video.volume = 1.0;
+        volumeIcon.textContent = '🔊';
+        volumeFill.style.width = '100%';
+      }
+    });
+    
+    volumeSlider.addEventListener('click', function(e) {
+      const rect = volumeSlider.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = x / rect.width;
+      video.volume = Math.max(0, Math.min(1, percentage));
+      volumeFill.style.width = (video.volume * 100) + '%';
+      volumeIcon.textContent = video.volume === 0 ? '🔇' : '🔊';
+    });
+  </script>
 </body>
 </html>
