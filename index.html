@@ -66,16 +66,6 @@
       text-align: center;
       font-family: 'TerminusTTF-Bold', Arial, sans-serif;
     }
-    p {
-      color: #BAC0DE;
-    }
-    a {
-      color: #0466c8;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
     .credit-text {
       position: fixed;
       bottom: 10px;
@@ -85,7 +75,7 @@
       z-index: 998;
     }
 
-    /* --- Cтиль ползунка громкости --- */
+    /* === Контрол громкости === */
     .volume-container {
       position: fixed;
       top: 30px;
@@ -93,12 +83,14 @@
       z-index: 999;
       display: flex;
       align-items: center;
+      gap: 10px;
     }
+
     .volume-circle {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: linear-gradient(135deg,#009EFF 65%, #8000FF 100%);
+      background: linear-gradient(135deg,#009EFF 65%,#8000FF 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -109,40 +101,42 @@
       transition: background 0.2s, transform 0.2s;
       box-shadow: 0 2px 7px rgba(0,0,0,.18);
       position: relative;
-      z-index: 2;
+      z-index: 3;
     }
     .volume-circle:hover {
-      background: linear-gradient(135deg,#009EFF 45%, #8000FF 85%);
-      transform: scale(1.08);
+      background: linear-gradient(135deg,#009EFF 45%,#8000FF 85%);
+      transform: scale(1.05);
     }
+
     .volume-panel {
       opacity: 0;
       pointer-events: none;
       position: absolute;
       right: 60px;
       top: 50%;
-      transform: translateY(-50%) translateX(30px);
-      transition: opacity 0.28s, transform 0.4s cubic-bezier(.77,0,.18,1);
+      transform: translateY(-50%) translateX(20px);
+      transition: opacity 0.4s cubic-bezier(.77,0,.18,1), transform 0.4s cubic-bezier(.77,0,.18,1);
       display: flex;
       align-items: center;
-      background: rgba(74,74,103,0.78);
+      background: rgba(74,74,103,0.8);
       border-radius: 20px;
       padding: 10px 16px;
       box-shadow: 0 2px 7px rgba(0,0,0,.22);
-      min-width: 138px;
+      min-width: 140px;
+      gap: 10px;
     }
-    .volume-circle:hover + .volume-panel,
-    .volume-panel:hover {
+
+    .volume-container.hovered .volume-panel {
       opacity: 1;
-      pointer-events: auto;
       transform: translateY(-50%) translateX(0);
+      pointer-events: auto;
     }
+
     .volume-slider {
       width: 82px;
       height: 10px;
       background: rgba(186,192,222,0.22);
       border-radius: 7px;
-      margin-right:8px;
       position: relative;
       cursor: pointer;
       overflow: hidden;
@@ -155,33 +149,26 @@
       width: 100%;
       background: linear-gradient(to right,#009EFF,#8000FF);
       border-radius: 7px;
-      transition: width 0.08s;
+      transition: width 0.35s cubic-bezier(.77,0,.18,1);
     }
-    .volume-percentage {
-      min-width: 32px;
-      font-size: 16px;
-      color: #BAC0DE;
-      font-family: inherit;
-      font-weight: bold;
-      text-align: right;
-    }
-    @media only screen and (max-width:600px){
-      .volume-panel { min-width:78px; padding:4px 7px;}
-      .volume-slider { width: 38px;}
-      .volume-percentage { min-width:16px;font-size:13px;}
-      .volume-circle { width:36px;height:36px;font-size:19px;}
-    }
-    /* --- конец --- */
 
+    .volume-percentage {
+      min-width: 35px;
+      text-align: right;
+      font-size: 15px;
+      color: #BAC0DE;
+      font-weight: bold;
+    }
+    /* === конец === */
   </style>
 </head>
 <body>
-  <video id="background-video" autoplay loop playsinline>
+  <video id="background-video" autoplay loop playsinline muted>
     <source src="bite-me.webm" type="video/webm">
   </video>
 
   <!-- Контрол громкости -->
-  <div class="volume-container">
+  <div class="volume-container" id="volumeContainer">
     <div class="volume-circle" id="volumeCircle">🔊</div>
     <div class="volume-panel" id="volumePanel">
       <div class="volume-slider" id="volumeSlider">
@@ -192,23 +179,31 @@
   </div>
 
   <div class="credit-text">Edit by Suni on YT</div>
-  
   <div class="container">
     <h1>Hello, I'm Meosssy!</h1>
   </div>
-  
+
   <script>
     const video = document.getElementById('background-video');
+    const volumeContainer = document.getElementById('volumeContainer');
     const volumeCircle = document.getElementById('volumeCircle');
     const volumeSlider = document.getElementById('volumeSlider');
     const volumeFill = document.getElementById('volumeFill');
     const volumePercent = document.getElementById('volumePercent');
-    let isMuted = false;
 
+    let isMuted = false;
     video.volume = 1.0;
     video.muted = false;
 
-    // mute/unmute при клике по иконке
+    // Панель появляется только при наведении на иконку
+    volumeCircle.addEventListener('mouseenter', () => {
+      volumeContainer.classList.add('hovered');
+    });
+    volumeContainer.addEventListener('mouseleave', () => {
+      volumeContainer.classList.remove('hovered');
+    });
+
+    // mute/unmute
     volumeCircle.addEventListener('click', function() {
       isMuted = !isMuted;
       video.muted = isMuted;
@@ -217,7 +212,7 @@
       volumePercent.textContent = isMuted ? '0%' : Math.round(video.volume * 100) + '%';
     });
 
-    // изменение громкости (клик по полоске)
+    // изменение громкости
     volumeSlider.addEventListener('click', function(e) {
       const rect = volumeSlider.getBoundingClientRect();
       const x = e.clientX - rect.left;
