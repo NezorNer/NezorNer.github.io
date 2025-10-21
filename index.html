@@ -92,13 +92,8 @@
       z-index: 999;
     }
     .volume-icon {
-      cursor: pointer;
       font-size: 24px;
       user-select: none;
-      transition: transform 0.2s;
-    }
-    .volume-icon:hover {
-      transform: scale(1.2);
     }
     .volume-slider {
       width: 150px;
@@ -187,21 +182,12 @@
     const volumeIcon = document.getElementById('volumeIcon');
     const volumeSlider = document.getElementById('volumeSlider');
     const volumeFill = document.getElementById('volumeFill');
-    
+
+    // Автозапуск с мутом (для автозапуска)
     video.volume = 1.0;
-    
-    volumeIcon.addEventListener('click', function() {
-      if (video.volume > 0) {
-        video.volume = 0;
-        volumeIcon.textContent = '🔇';
-        volumeFill.style.width = '0%';
-      } else {
-        video.volume = 1.0;
-        volumeIcon.textContent = '🔊';
-        volumeFill.style.width = '100%';
-      }
-    });
-    
+    video.muted = true;
+
+    // Только клик по полоске громкости управляет звуком
     volumeSlider.addEventListener('click', function(e) {
       const rect = volumeSlider.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -209,8 +195,12 @@
       video.volume = Math.max(0, Math.min(1, percentage));
       volumeFill.style.width = (video.volume * 100) + '%';
       volumeIcon.textContent = video.volume === 0 ? '🔇' : '🔊';
+      // Если звук не нулевой — снимаем mute при первом клике
+      video.muted = video.volume === 0;
     });
+
+    // По умолчанию полоска заполнена полностью (100%)
+    volumeFill.style.width = '100%';
   </script>
 </body>
 </html>
-
