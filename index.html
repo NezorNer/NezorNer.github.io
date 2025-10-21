@@ -74,6 +74,34 @@
       z-index: 998;
     }
     
+    /* === Loading Screen === */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10000;
+      pointer-events: none;
+    }
+    #loading-screen h2 {
+      color: #BAC0DE;
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    #loading-percent {
+      color: #BAC0DE;
+      font-size: 24px;
+      text-align: center;
+    }
+    
     /* === Entry Screen (Splash) === */
     #entry-screen {
       position: fixed;
@@ -83,7 +111,7 @@
       height: 100vh;
       background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(10px);
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       z-index: 9999;
@@ -173,9 +201,15 @@
   </style>
 </head>
 <body>
-  <video id="background-video" autoplay loop playsinline muted>
+  <video id="background-video" loop playsinline muted preload="auto">
     <source src="bite-me.webm" type="video/webm">
   </video>
+  
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <h2>Loading...</h2>
+    <div id="loading-percent">0%</div>
+  </div>
   
   <!-- Entry Screen -->
   <div id="entry-screen">
@@ -204,17 +238,50 @@
     const volumeSlider = document.getElementById('volumeSlider');
     const volumeFill = document.getElementById('volumeFill');
     const volumePercent = document.getElementById('volumePercent');
+    const loadingScreen = document.getElementById('loading-screen');
+    const loadingPercent = document.getElementById('loading-percent');
     const entryScreen = document.getElementById('entry-screen');
     
     let isMuted = false;
     let isDragging = false;
+    let videoLoaded = false;
     
     // Set initial volume to 30%
     video.volume = 0.3;
     volumeFill.style.width = '30%';
     volumePercent.textContent = '30%';
     
-    // Entry screen click handler
+    // Track video loading progress
+    video.addEventListener('progress', function() {
+      if (video.buffered.length > 0) {
+        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+        const duration = video.duration;
+        if (duration > 0) {
+          const percent = Math.round((bufferedEnd / duration) * 100);
+          loadingPercent.textContent = percent + '%';
+          
+          if (percent >= 100 && !videoLoaded) {
+            videoLoaded = true;
+            loadingScreen.style.display = 'none';
+            entryScreen.style.display = 'flex';
+          }
+        }
+      }
+    });
+    
+    // Handle when video can play (fallback)
+    video.addEventListener('canplaythrough', function() {
+      if (!videoLoaded) {
+        videoLoaded = true;
+        loadingPercent.textContent = '100%';
+        setTimeout(function() {
+          loadingScreen.style.display = 'none';
+          entryScreen.style.display = 'flex';
+        }, 300);
+      }
+    });
+    
+    // Entry screen click handler - start video
     entryScreen.addEventListener('click', function() {
       video.muted = false;
       video.play();
