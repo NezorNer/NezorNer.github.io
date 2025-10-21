@@ -160,9 +160,17 @@
   </style>
 </head>
 <body>
-  <video id="background-video" autoplay loop playsinline>
-    <source src="bite-me.webm" type="video/webm">
-  </video>
+ <video id="background-video" autoplay loop playsinline muted>
+  <source src="bite-me.webm" type="video/webm">
+</video>
+<script>
+  const video = document.getElementById('background-video');
+  document.body.addEventListener('click', function oneClick() {
+    video.muted = false;
+    video.volume = 1.0;
+    document.body.removeEventListener('click', oneClick);
+  });
+</script>
   
   <div class="volume-control">
     <div class="volume-icon" id="volumeIcon">🔊</div>
@@ -204,3 +212,4 @@
   </script>
 </body>
 </html>
+
