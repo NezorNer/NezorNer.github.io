@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="logos/LOGO.jpg" type="image/jpeg">
   <title>Meosssy's Page</title>
   <style>
     @font-face {
@@ -81,177 +82,179 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
+      background: #1a1a2e;
       display: flex;
-      align-items: center;
       justify-content: center;
-      flex-direction: column;
-      z-index: 10000;
-      pointer-events: none;
+      align-items: center;
+      z-index: 999;
     }
-    #loading-screen h2 {
-      color: #BAC0DE;
-      font-size: 32px;
+    .loading-content {
       text-align: center;
-      margin-bottom: 15px;
-    }
-    #loading-percent {
       color: #BAC0DE;
+    }
+    .loading-circle {
+      width: 100px;
+      height: 100px;
+      border: 8px solid rgba(186, 192, 222, 0.2);
+      border-top: 8px solid #009EFF;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading-text {
       font-size: 24px;
-      text-align: center;
+      margin-bottom: 10px;
+    }
+    .loading-percent {
+      font-size: 18px;
+      color: #009EFF;
     }
     
-    /* === Entry Screen (Splash) === */
+    /* === Entry Screen === */
     #entry-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
+      background: rgba(26, 26, 46, 0.9);
       display: none;
-      align-items: center;
       justify-content: center;
-      z-index: 9999;
+      align-items: center;
+      z-index: 999;
       cursor: pointer;
     }
-    #entry-screen h2 {
+    .entry-text {
       color: #BAC0DE;
       font-size: 32px;
       text-align: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
     }
     
-    /* === Контрол громкости === */
-    .volume-container {
+    /* === Volume Control === */
+    .volume-control {
       position: fixed;
-      top: 30px;
-      left: 30px;
-      z-index: 999;
+      bottom: 20px;
+      left: 20px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      z-index: 998;
     }
     .volume-circle {
-      width: 42px;
-      height: 42px;
+      width: 50px;
+      height: 50px;
       background: rgba(74, 74, 103, 0.8);
-      backdrop-filter: blur(12px);
       border-radius: 50%;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      font-size: 24px;
       cursor: pointer;
-      font-size: 22px;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
+      margin-right: 10px;
+      user-select: none;
+      transition: background 0.3s;
     }
     .volume-circle:hover {
-      background: rgba(74, 74, 103, 0.95);
-      border-color: rgba(0, 158, 255, 0.5);
-    }
-    .volume-panel {
-      background: rgba(74, 74, 103, 0.8);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      opacity: 0;
-      transform: translateX(-10px);
-      pointer-events: none;
-      transition: all 0.3s ease;
-      min-width: 100px;
-    }
-    .volume-container:hover .volume-panel {
-      opacity: 1;
-      transform: translateX(0);
-      pointer-events: all;
+      background: rgba(74, 74, 103, 1);
     }
     .volume-slider {
-      width: 60px;
-      height: 6px;
+      width: 150px;
+      height: 8px;
       background: rgba(186, 192, 222, 0.3);
-      border-radius: 3px;
+      border-radius: 4px;
       position: relative;
       cursor: pointer;
     }
-    .volume-slider-fill {
+    .volume-fill {
       height: 100%;
       background: linear-gradient(to right, #009EFF, #8000FF);
-      border-radius: 3px;
-      width: 30%;
-      transition: width 0.1s ease;
+      border-radius: 4px;
+      transition: width 0.1s;
     }
-    .volume-percentage {
+    .volume-percent {
       color: #BAC0DE;
+      margin-left: 10px;
       font-size: 14px;
       min-width: 35px;
-      color: #BAC0DE;
-      font-weight: bold;
-    }
-    @media only screen and (max-width:600px){
-      .volume-circle { width: 36px; height: 36px; font-size: 19px; }
-      .volume-panel { min-width: 90px; padding: 6px 8px; }
-      .volume-slider { width: 50px; }
-      .volume-percentage { font-size: 13px; }
     }
   </style>
 </head>
 <body>
-  <video id="background-video" loop playsinline muted preload="auto">
-    <source src="bite-me.webm" type="video/webm">
-  </video>
-  
   <!-- Loading Screen -->
   <div id="loading-screen">
-    <h2>Loading...</h2>
-    <div id="loading-percent">0%</div>
-  </div>
-  
-  <!-- Entry Screen -->
-  <div id="entry-screen">
-    <h2>Click to enter...</h2>
-  </div>
-  
-  <!-- Контрол громкости -->
-  <div class="volume-container" id="volumeContainer">
-    <div class="volume-circle" id="volumeCircle">🔊</div>
-    <div class="volume-panel" id="volumePanel">
-      <div class="volume-slider" id="volumeSlider">
-        <div class="volume-slider-fill" id="volumeFill"></div>
-      </div>
-      <span class="volume-percentage" id="volumePercent">30%</span>
+    <div class="loading-content">
+      <div class="loading-circle"></div>
+      <div class="loading-text">Loading...</div>
+      <div class="loading-percent">0%</div>
     </div>
   </div>
-  
-  <div class="credit-text">Edit by Suni on YT</div>
-  <div class="container">
-    <h1>Hello, I'm Meosssy!</h1>
+
+  <!-- Entry Screen -->
+  <div id="entry-screen">
+    <div class="entry-text">Click to Start</div>
   </div>
-  
+
+  <!-- Background Video -->
+  <video id="background-video" autoplay muted loop playsinline>
+    <source src="videos/bite-me.webm" type="video/webm">
+  </video>
+
+  <!-- Main Container -->
+  <div class="container">
+    <h1>Welcome to Meosssy's Page</h1>
+  </div>
+
+  <!-- Volume Control -->
+  <div class="volume-control">
+    <div class="volume-circle">🔊</div>
+    <div class="volume-slider">
+      <div class="volume-fill" style="width: 100%;"></div>
+    </div>
+    <div class="volume-percent">100%</div>
+  </div>
+
+  <!-- Credit -->
+  <div class="credit-text">by Meosssy</div>
+
   <script>
     const video = document.getElementById('background-video');
-    const volumeCircle = document.getElementById('volumeCircle');
-    const volumeSlider = document.getElementById('volumeSlider');
-    const volumeFill = document.getElementById('volumeFill');
-    const volumePercent = document.getElementById('volumePercent');
     const loadingScreen = document.getElementById('loading-screen');
-    const loadingPercent = document.getElementById('loading-percent');
+    const loadingPercent = document.querySelector('.loading-percent');
     const entryScreen = document.getElementById('entry-screen');
+    const volumeCircle = document.querySelector('.volume-circle');
+    const volumeSlider = document.querySelector('.volume-slider');
+    const volumeFill = document.querySelector('.volume-fill');
+    const volumePercent = document.querySelector('.volume-percent');
     
     let isMuted = false;
     let isDragging = false;
     let videoLoaded = false;
     
-    // Set initial volume to 30%
-    video.volume = 0.3;
-    volumeFill.style.width = '30%';
-    volumePercent.textContent = '30%';
+    // Update volume icon based on percentage
+    function updateVolumeIcon() {
+      const volumeValue = video.volume * 100;
+      if (volumeValue === 0) {
+        volumeCircle.textContent = '🔈';
+      } else if (volumeValue >= 1 && volumeValue <= 50) {
+        volumeCircle.textContent = '🔉';
+      } else {
+        volumeCircle.textContent = '🔊';
+      }
+    }
     
-    // Track video loading progress
+    // Set video volume to 100% by default
+    video.volume = 1.0;
+    updateVolumeIcon();
+    
+    // Loading progress simulation using 'progress' event
     video.addEventListener('progress', function() {
       if (video.buffered.length > 0) {
         const bufferedEnd = video.buffered.end(video.buffered.length - 1);
@@ -259,7 +262,6 @@
         if (duration > 0) {
           const percent = Math.round((bufferedEnd / duration) * 100);
           loadingPercent.textContent = percent + '%';
-          
           if (percent >= 100 && !videoLoaded) {
             videoLoaded = true;
             loadingScreen.style.display = 'none';
@@ -292,9 +294,15 @@
     volumeCircle.addEventListener('click', function() {
       isMuted = !isMuted;
       video.muted = isMuted;
-      volumeCircle.textContent = isMuted ? '🔇' : '🔊';
-      volumeFill.style.width = isMuted ? '0%' : (video.volume * 100) + '%';
-      volumePercent.textContent = isMuted ? '0%' : Math.round(video.volume * 100) + '%';
+      if (isMuted) {
+        volumeCircle.textContent = '🔈';
+        volumeFill.style.width = '0%';
+        volumePercent.textContent = '0%';
+      } else {
+        volumeFill.style.width = (video.volume * 100) + '%';
+        volumePercent.textContent = Math.round(video.volume * 100) + '%';
+        updateVolumeIcon();
+      }
     });
     
     // Change volume function
@@ -309,12 +317,11 @@
       if (video.volume === 0) {
         video.muted = true;
         isMuted = true;
-        volumeCircle.textContent = '🔇';
       } else {
         video.muted = false;
         isMuted = false;
-        volumeCircle.textContent = '🔊';
       }
+      updateVolumeIcon();
     }
     
     // Click to change volume
