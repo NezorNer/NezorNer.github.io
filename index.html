@@ -163,6 +163,34 @@
   <video loop playsinline id="video-bg" preload="auto">
         <source src="bite-me.webm" />
     </video>
+  <script>
+    const volumeSlider = document.querySelector('.volume-controller .volume-slider');
+        const videoBg = document.getElementById('video-bg');
+        const volumePercent = document.getElementById('volume-percent');
+
+        function updateVolumePercent() {
+            let show = Math.round(videoBg.muted ? 0 : videoBg.volume * 100);
+            volumePercent.textContent = show + "%";
+            if(videoBg.muted && volumeSlider.value != "0") volumeSlider.value = 0;
+            if(!videoBg.muted && +volumeSlider.value == 0) volumeSlider.value = Math.round(videoBg.volume * 100);
+        }
+        videoBg.volume = 0.1;
+        volumeSlider.value = 10
+        updateVolumePercent();
+
+        volumeSlider.addEventListener('input', function () {
+            videoBg.volume = +this.value / 100;
+            videoBg.muted = (+this.value === 0);
+            updateVolumePercent();
+        });
+
+        document.querySelector('.volume-controller .volume-icon').addEventListener('click', function () {
+            videoBg.muted = !videoBg.muted;
+            updateVolumePercent();
+        });
+
+        videoBg.addEventListener('volumechange', updateVolumePercent);
+  </script>
   
   <div class="volume-control">
     <div class="volume-icon" id="volumeIcon">🔊</div>
@@ -170,6 +198,7 @@
       <div class="volume-slider-fill" id="volumeFill"></div>
     </div>
   </div>
+  
   
   <div class="credit-text">Edit by Suni on YT</div>
   
@@ -204,5 +233,6 @@
   </script>
 </body>
 </html>
+
 
 
