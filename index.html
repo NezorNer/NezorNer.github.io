@@ -86,7 +86,7 @@
     }
 
     /* --- Cтиль ползунка громкости --- */
-    .volume-floating {
+    .volume-container {
       position: fixed;
       top: 30px;
       right: 30px;
@@ -94,51 +94,55 @@
       display: flex;
       align-items: center;
     }
-
     .volume-circle {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: linear-gradient(135deg,#009EFF 65%,#8000FF 100%);
+      background: linear-gradient(135deg,#009EFF 65%, #8000FF 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 26px;
       color: #fff;
       cursor: pointer;
-      box-shadow: 0 2px 7px rgba(0,0,0,.18);
       user-select: none;
       transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 2px 7px rgba(0,0,0,.18);
+      position: relative;
+      z-index: 2;
     }
-
     .volume-circle:hover {
-      transform: scale(1.08) rotate(-8deg);
-      background: linear-gradient(135deg,#009EFF 45%,#8000FF 85%);
+      background: linear-gradient(135deg,#009EFF 45%, #8000FF 85%);
+      transform: scale(1.08);
     }
-
     .volume-panel {
       opacity: 0;
-      transform: translateX(60px);
       pointer-events: none;
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%) translateX(30px);
+      transition: opacity 0.28s, transform 0.4s cubic-bezier(.77,0,.18,1);
       display: flex;
       align-items: center;
-      margin-left: 10px;
-      transition: opacity 0.28s, transform 0.4s cubic-bezier(.77,0,.18,1);
-      width: 140px;
+      background: rgba(74,74,103,0.78);
+      border-radius: 20px;
+      padding: 10px 16px;
+      box-shadow: 0 2px 7px rgba(0,0,0,.22);
+      min-width: 138px;
     }
-
-    .volume-floating:hover .volume-panel {
+    .volume-circle:hover + .volume-panel,
+    .volume-panel:hover {
       opacity: 1;
-      transform: translateX(0);
       pointer-events: auto;
+      transform: translateY(-50%) translateX(0);
     }
-
     .volume-slider {
       width: 82px;
       height: 10px;
       background: rgba(186,192,222,0.22);
       border-radius: 7px;
-      margin: 0 8px;
+      margin-right:8px;
       position: relative;
       cursor: pointer;
       overflow: hidden;
@@ -151,7 +155,7 @@
       width: 100%;
       background: linear-gradient(to right,#009EFF,#8000FF);
       border-radius: 7px;
-      transition: width 0.1s;
+      transition: width 0.08s;
     }
     .volume-percentage {
       min-width: 32px;
@@ -159,13 +163,13 @@
       color: #BAC0DE;
       font-family: inherit;
       font-weight: bold;
-      margin-left: 2px;
+      text-align: right;
     }
-
     @media only screen and (max-width:600px){
-      .volume-panel { width: 85px;}
-      .volume-slider { width: 40px;}
-      .volume-percentage { min-width:16px;font-size:14px;}
+      .volume-panel { min-width:78px; padding:4px 7px;}
+      .volume-slider { width: 38px;}
+      .volume-percentage { min-width:16px;font-size:13px;}
+      .volume-circle { width:36px;height:36px;font-size:19px;}
     }
     /* --- конец --- */
 
@@ -176,8 +180,8 @@
     <source src="bite-me.webm" type="video/webm">
   </video>
 
-  <!-- Cюда вставлен ползунок громкости -->
-  <div class="volume-floating" id="volumeFloating">
+  <!-- Контрол громкости -->
+  <div class="volume-container">
     <div class="volume-circle" id="volumeCircle">🔊</div>
     <div class="volume-panel" id="volumePanel">
       <div class="volume-slider" id="volumeSlider">
@@ -199,10 +203,10 @@
     const volumeSlider = document.getElementById('volumeSlider');
     const volumeFill = document.getElementById('volumeFill');
     const volumePercent = document.getElementById('volumePercent');
+    let isMuted = false;
 
     video.volume = 1.0;
     video.muted = false;
-    let isMuted = false;
 
     // mute/unmute при клике по иконке
     volumeCircle.addEventListener('click', function() {
