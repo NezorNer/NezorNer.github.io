@@ -193,25 +193,39 @@
       color: #BAC0DE;
       font-weight: bold;
     }
-    .custom-box {
-      width: 290px;
-      height: 180px;
-      border: 5px solid #BAC0DE;
-      border-radius: 18px;
+    .custom-img {
+      width: 100%;
+      height: 50px; /* например, либо свое значение */
+      object-fit: cover;
+      border-top-left-radius: 18px;  /* так же, как у custom-box */
+      border-top-right-radius: 18px; /* так же, как у custom-box */
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      display: block;
       position: absolute;
-      top: 15px;
-      left: 15px;
-      background: #1e2233;
-      display: flex;
-      align-items: center;
+      left: 0;
+      top: 0;
+      z-index: 1;           /* картинка под кругом */
     }
+
+    .custom-box {
+      position: relative;
+      /* остальные стили, как у вас есть */
+    }
+
     .circle {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
       width: 75px;
       height: 75px;
       border-radius: 50%;
       background: #3483fa;
-      margin-left: 15px;
+      z-index: 2;           /* круг над изображением */
+      margin-left: 0;
     }
+
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
       .volume-panel { min-width: 90px; padding: 6px 8px; }
@@ -262,6 +276,7 @@
   <div class="credit-text">Edit by Suni on YT</div>
   <div class="container">
     <div class="custom-box">
+      <img src="cyn.jpg" class="custom-img">
       <div class="circle"></div>
     </div>
     <h1 style="margin-left: 300px;">Hello, I'm Meosssy!</h1>
@@ -373,3 +388,4 @@
   </script>
 </body>
 </html>
+
