@@ -198,7 +198,7 @@
       height: 180px;
       border: 5px solid #BAC0DE;
       border-radius: 18px;
-      position: absolute;
+      position: relative;
       top: 15px;
       left: 15px;
       display: flex;
@@ -206,8 +206,7 @@
     }
     .top-half,
     .bottom-half {
-      flex: 1;                   /* пополам */
-      /* Дополнительно для видимости */
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -224,6 +223,9 @@
       border-radius: 50%;
       background: #3483fa;
       margin-left: 15px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
     }
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
@@ -388,6 +390,7 @@
   </script>
 </body>
 </html>
+
 
 
 
