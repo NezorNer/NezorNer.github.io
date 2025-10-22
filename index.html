@@ -193,26 +193,31 @@
       color: #BAC0DE;
       font-weight: bold;
     }
+    .custom-box {
+      position: relative;
+      width: 290px;
+      height: 180px;
+      border: 5px solid #BAC0DE;
+      border-radius: 18px;
+      background: #1e2233;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
     .custom-img {
       width: 100%;
-      height: 50px; /* например, либо свое значение */
+      height: 54px; /* выберите нужную высоту */
       object-fit: cover;
-      border-top-left-radius: 18px;  /* так же, как у custom-box */
-      border-top-right-radius: 18px; /* так же, как у custom-box */
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
       display: block;
-      position: absolute;
-      left: 0;
-      top: 0;
-      z-index: 1;           /* картинка под кругом */
+      /* БЕЗ absolute! */
+      z-index: 1;
     }
-
-    .custom-box {
-      position: relative;
-      /* остальные стили, как у вас есть */
-    }
-
     .circle {
       position: absolute;
       left: 15px;
@@ -222,7 +227,7 @@
       height: 75px;
       border-radius: 50%;
       background: #3483fa;
-      z-index: 2;           /* круг над изображением */
+      z-index: 2;
       margin-left: 0;
     }
 
@@ -388,4 +393,5 @@
   </script>
 </body>
 </html>
+
 
