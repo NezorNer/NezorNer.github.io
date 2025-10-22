@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -198,24 +198,12 @@
       height: 180px;
       border: 5px solid #BAC0DE;
       border-radius: 18px;
-      position: relative;
+      position: absolute;
       top: 15px;
       left: 15px;
-      display: flex;
-      flex-direction: column;
-    }
-    .top-half,
-    .bottom-half {
-      flex: 1;
+      background: #1e2233;
       display: flex;
       align-items: center;
-      justify-content: center;
-    }
-    .top-half {
-      background: #2a3150;
-    }
-    .bottom-half {
-      background: #23223c;
     }
     .circle {
       width: 75px;
@@ -223,9 +211,6 @@
       border-radius: 50%;
       background: #3483fa;
       margin-left: 15px;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
     }
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
@@ -277,8 +262,6 @@
   <div class="credit-text">Edit by Suni on YT</div>
   <div class="container">
     <div class="custom-box">
-      <div class="top-half">Верхняя половина</div>
-      <div class="bottom-half">Нижняя половина</div>
       <div class="circle"></div>
     </div>
     <h1 style="margin-left: 300px;">Hello, I'm Meosssy!</h1>
@@ -390,13 +373,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
