@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -201,9 +201,22 @@
       position: absolute;
       top: 15px;
       left: 15px;
-      background: #1e2233;
+      display: flex;
+      flex-direction: column;
+    }
+    .top-half,
+    .bottom-half {
+      flex: 1;                   /* пополам */
+      /* Дополнительно для видимости */
       display: flex;
       align-items: center;
+      justify-content: center;
+    }
+    .top-half {
+      background: #2a3150;
+    }
+    .bottom-half {
+      background: #23223c;
     }
     .circle {
       width: 75px;
@@ -262,6 +275,8 @@
   <div class="credit-text">Edit by Suni on YT</div>
   <div class="container">
     <div class="custom-box">
+      <div class="top-half">Верхняя половина</div>
+      <div class="bottom-half">Нижняя половина</div>
       <div class="circle"></div>
     </div>
     <h1 style="margin-left: 300px;">Hello, I'm Meosssy!</h1>
@@ -373,6 +388,7 @@
   </script>
 </body>
 </html>
+
 
 
 
