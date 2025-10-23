@@ -240,14 +240,17 @@
       height: auto;
       display: block;
     }
-    .custom-gif {
-      width: 85px;        /* Гиф будет по ширине блока */
-      height: 85px;       /* Задай свою высоту */
-      object-fit: cover;  /* Обрезка без искажений */
-      margin-top: 10px;   /* Отступ сверху, если нужно */
-      display: block;
+    .banner-over-circle {
+      position: absolute;
+      left: 15px;             /* те же координаты, что и .circle */
+      top: 50%;
+      transform: translateY(-50%);
+      width: 85px;            /* или больше, если нужно */
+      height: 85px;           /* чтобы не было обрезания, можно увеличить */
+      z-index: 5;             /* выше, чем .circle */
+      pointer-events: none;   /* чтобы клики проходили сквозь gif */
     }
-
+    
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
       .volume-panel { min-width: 90px; padding: 6px 8px; }
@@ -293,10 +296,9 @@
   <div class="credit-text">Edit by Suni on YT</div>
   <div class="container">
     <div class="custom-box">
-      <img src="decor.gif" class="custom-gif">
-      <img src="https://cdn.discordapp.com/avatar-decoration-presets/a_be111e4303d634c55500202a61656e0b.png?size=80&passthrough=true" class="custom-img">
       <img src="UZIART.jpg" class="custom-img">
       <div class="circle"></div>
+      <img src="decor.gif" class="banner-over-circle">
       <img src="UZICAT.jpg" class="circle-img">
     </div>
     <h1 style="transform: translate(-10px, -180px); text-align: right;">Hello, I'm Meosssy!</h1>
@@ -401,6 +403,7 @@
   </script>
 </body>
 </html>
+
 
 
 
