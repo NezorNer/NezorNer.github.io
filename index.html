@@ -74,8 +74,6 @@
       font-size: 12px;
       z-index: 998;
     }
-    
-    /* === Loading Screen === */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -102,8 +100,6 @@
       font-size: 24px;
       text-align: center;
     }
-    
-    /* === Entry Screen (Splash) === */
     #entry-screen {
       position: fixed;
       top: 0;
@@ -123,8 +119,6 @@
       font-size: 32px;
       text-align: center;
     }
-    
-    /* === Контрол громкости === */
     .volume-container {
       position: fixed;
       top: 30px;
@@ -197,25 +191,24 @@
       position: relative;
       width: 290px;
       height: 180px;
-      border: 5px solid #BAC0DE;
+      border: 5px solid #BB73FF;
       border-radius: 18px;
-      background: #1e2233;
+      background: #830eb1;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
+      transform: translate(-15px, -15px);
     }
-
     .custom-img {
       width: 100%;
-      height: 90px; /* выберите нужную высоту */
+      height: 90px;
       object-fit: cover;
-      border-top-left-radius: 18px;
-      border-top-right-radius: 18px;
+      border-top-left-radius: 1px;
+      border-top-right-radius: 1px;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
       display: block;
-      /* БЕЗ absolute! */
       z-index: 1;
     }
     .circle {
@@ -255,19 +248,13 @@
   <video id="background-video" loop playsinline muted preload="auto">
     <source src="bite-me.webm" type="video/webm">
   </video>
-  
-  <!-- Loading Screen -->
   <div id="loading-screen">
     <h2>Loading...</h2>
     <div id="loading-percent">0%</div>
   </div>
-  
-  <!-- Entry Screen -->
   <div id="entry-screen">
     <h2>Click to enter...</h2>
   </div>
-  
-  <!-- Контрол громкости -->
   <div class="volume-container" id="volumeContainer">
     <div class="volume-circle" id="volumeCircle">🔊</div>
     <div class="volume-panel" id="volumePanel">
@@ -284,7 +271,7 @@
       <img src="cyn.jpg" class="custom-img">
       <div class="circle"></div>
     </div>
-    <h1 style="margin-left: 300px;">Hello, I'm Meosssy!</h1>
+    <h1 style="transform: translate(-10px, -180px); text-align: right;">Hello, I'm Meosssy!</h1>
   </div>
   
   <script>
@@ -301,12 +288,10 @@
     let isDragging = false;
     let videoLoaded = false;
     
-    // Set initial volume to 30%
     video.volume = 0.3;
     volumeFill.style.width = '30%';
     volumePercent.textContent = '30%';
     
-    // Track video loading progress
     video.addEventListener('progress', function() {
       if (video.buffered.length > 0) {
         const bufferedEnd = video.buffered.end(video.buffered.length - 1);
@@ -324,7 +309,6 @@
       }
     });
     
-    // Handle when video can play (fallback)
     video.addEventListener('canplaythrough', function() {
       if (!videoLoaded) {
         videoLoaded = true;
@@ -336,14 +320,12 @@
       }
     });
     
-    // Entry screen click handler - start video
     entryScreen.addEventListener('click', function() {
       video.muted = false;
       video.play();
       entryScreen.style.display = 'none';
     });
     
-    // mute/unmute
     volumeCircle.addEventListener('click', function() {
       isMuted = !isMuted;
       video.muted = isMuted;
@@ -352,7 +334,6 @@
       volumePercent.textContent = isMuted ? '0%' : Math.round(video.volume * 100) + '%';
     });
     
-    // Change volume function
     function changeVolume(e) {
       const rect = volumeSlider.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -372,10 +353,8 @@
       }
     }
     
-    // Click to change volume
     volumeSlider.addEventListener('click', changeVolume);
     
-    // Drag to change volume
     volumeSlider.addEventListener('mousedown', function(e) {
       isDragging = true;
       changeVolume(e);
@@ -393,6 +372,7 @@
   </script>
 </body>
 </html>
+
 
 
 
