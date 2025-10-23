@@ -240,6 +240,13 @@
       height: auto;
       display: block;
     }
+    .custom-gif {
+      width: 85px;        /* Гиф будет по ширине блока */
+      height: 85px;       /* Задай свою высоту */
+      object-fit: cover;  /* Обрезка без искажений */
+      margin-top: 10px;   /* Отступ сверху, если нужно */
+      display: block;
+    }
 
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
@@ -286,6 +293,8 @@
   <div class="credit-text">Edit by Suni on YT</div>
   <div class="container">
     <div class="custom-box">
+      <img src="decor.gif" class="custom-gif">
+      <img src="https://cdn.discordapp.com/avatar-decoration-presets/a_be111e4303d634c55500202a61656e0b.png?size=80&passthrough=true" class="custom-img">
       <img src="UZIART.jpg" class="custom-img">
       <div class="circle"></div>
       <img src="UZICAT.jpg" class="circle-img">
@@ -392,6 +401,7 @@
   </script>
 </body>
 </html>
+
 
 
 
