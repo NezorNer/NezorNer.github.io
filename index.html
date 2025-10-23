@@ -233,6 +233,7 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 3;
+      pointer-events: none; 
     }
     .banner-img {
       width: 100%;
@@ -242,13 +243,13 @@
     }
     .banner-over-circle {
       position: absolute;
-      left: 15px;             /* те же координаты, что и .circle */
+      left: 8px;
       top: 50%;
       transform: translateY(-50%);
-      width: 85px;            /* или больше, если нужно */
-      height: 85px;           /* чтобы не было обрезания, можно увеличить */
-      z-index: 5;             /* выше, чем .circle */
-      pointer-events: none;   /* чтобы клики проходили сквозь gif */
+      width: 100px;
+      height: 100px;
+      z-index: 5;
+      pointer-events: none; 
     }
     
     @media only screen and (max-width:600px){
@@ -302,7 +303,7 @@
       <img src="UZICAT.jpg" class="circle-img">
     </div>
     <h1 style="transform: translate(-10px, -180px); text-align: right;">Hello, I'm Meosssy!</h1>
-    <img src="banner1.jpg" class="banner-img" style="transform: translate(284px, -170px)">
+    <img src="banner1.jpg" class="banner-img" style="transform: translate(284px, -170px); pointer-events: none;">
   </div>
   
   <script>
@@ -403,6 +404,7 @@
   </script>
 </body>
 </html>
+
 
 
 
