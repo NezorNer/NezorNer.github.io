@@ -184,7 +184,7 @@
       color: #BAC0DE;
       font-size: 14px;
       min-width: 35px;
-      color: #BAC0DE;
+      color: #BAC0DE
       font-weight: bold;
     }
     .custom-box {
@@ -234,6 +234,13 @@
       transform: translateY(-50%);
       z-index: 3;
     }
+    .banner-img {
+      width: 100%;
+      max-width: 700px; /* можешь выбрать другое значение */
+      height: auto;
+      display: block;
+    }
+
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
       .volume-panel { min-width: 90px; padding: 6px 8px; }
@@ -244,6 +251,7 @@
     }
   </style>
 <style>
+
   * {
     user-select: none;
   }
@@ -283,7 +291,7 @@
       <img src="UZICAT.jpg" class="circle-img">
     </div>
     <h1 style="transform: translate(-10px, -180px); text-align: right;">Hello, I'm Meosssy!</h1>
-    <img src="banner1.jpg" style="transform: translate(284px, -170px)">
+    <img src="banner1.jpg" class="banner-img" style="transform: translate(284px, -170px)">
   </div>
   
   <script>
@@ -384,6 +392,7 @@
   </script>
 </body>
 </html>
+
 
 
 
