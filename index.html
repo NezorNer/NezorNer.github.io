@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -235,30 +235,12 @@
       z-index: 3;
       pointer-events: none; 
     }
-    .banner1-wrapper {
-      position: relative;
-      display: inline-block; /* чтобы размер подстраивался под картинку */
-      border-radius: 5px;
-      transform: translate(284px, -170px);
-      pointer-events: none;
-      /* overflow: visible; */
-    }
     .banner1-img {
       width: 100%;
       max-width: 420px;
       height: auto;
       display: block;
       pointer-events: none;
-    }
-    .banner1-wrapper::before {
-      content: '';
-      position: absolute;
-      inset: -8px;
-      border-radius: 9px;
-      z-index: 0;
-      background: conic-gradient(from 0deg, #ba00ff 0%, #8000ff 40%, #ba00ff 80%, #8000ff 100%);
-      box-shadow: 0 0 32px #ba00ff, 0 0 48px #8000ff;
-      animation: neonMove 2s linear infinite;
     }
     .banner-over-circle {
       position: absolute;
@@ -271,11 +253,6 @@
       pointer-events: none; 
     }
     
-    @keyframes neonMove {
-      to {
-        transform: rotate(360deg);
-      }
-    }
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
       .volume-panel { min-width: 90px; padding: 6px 8px; }
@@ -327,9 +304,7 @@
       <img src="UZICAT.jpg" class="circle-img">
     </div>
     <h1 style="transform: translate(-10px, -180px); text-align: right;">Hello, I'm Meosssy!</h1>
-    <div class="banner1-wrapper">
-      <img src="banner1.jpg" class="banner1-img">
-    </div>
+    <img src="banner1.jpg" class="banner1-img" style="transform: translate(284px, -170px); pointer-events: none;">
   </div>
   
   <script>
@@ -430,26 +405,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
