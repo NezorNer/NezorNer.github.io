@@ -191,7 +191,7 @@
       position: relative;
       width: 290px;
       height: 180px;
-      border: 5px solid #8846c5;
+      border: 5px solid #c69eed;
       border-radius: 18px;
       background: #43005d;
       overflow: hidden;
@@ -199,6 +199,9 @@
       flex-direction: column;
       justify-content: flex-start;
       transform: translate(-15px, -15px);
+      box-shadow:
+        0 0 12px #c78cdd,
+        0 0 24px #b978f7;
     }
     .custom-img {
       width: 100%;
@@ -210,6 +213,7 @@
       border-bottom-right-radius: 0;
       display: block;
       z-index: 1;
+      pointer-events: none;
     }
     .circle {
       position: absolute;
@@ -409,5 +413,6 @@
   </script>
 </body>
 </html>
+
 
 
