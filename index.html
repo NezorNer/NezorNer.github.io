@@ -12,6 +12,12 @@
       font-weight: bold;
       font-style: normal;
     }
+    @font-face {
+      font-family: 'Goldman-Regular';
+      src: url('fonts/Goldman-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
     * {
       margin: 0;
       padding: 0;
@@ -261,6 +267,10 @@
       pointer-events: none; 
     }
     .bottom-box {
+      position: relative;
+      padding-left: 22px;
+      display: flex;
+      align-items: center;
       height: 50px;
       width: 700px;
       transform: translate(-5px, 15px);
@@ -268,6 +278,12 @@
       border-radius: 14px;
       border: 5px solid #6c00d5;
       box-shadow: 0 0 12px #000000, 0 0 24px #442d5b;
+    }
+    .goldman-left {
+      font-family: 'Goldman-Regular', Arial, sans-serif;
+      color: #BAC0DE;
+      font-size: 22px;
+      text-align: left;
     }
 
     @media only screen and (max-width:600px){
@@ -333,6 +349,8 @@
     <h1 style="transform: translate(-10px, -310px); text-align: right;">Hello, I'm Meosssy!</h1>
     <img src="banner1.jpg" class="banner1-img" style="transform: translate(284px, -300px); pointer-events: none;">
     <div class="bottom-box">
+      <span class="goldman-left">Socials</span>
+    </div>
   </div>
   
   <script>
@@ -433,6 +451,7 @@
   </script>
 </body>
 </html>
+
 
 
 
