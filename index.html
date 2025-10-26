@@ -321,6 +321,7 @@
       justify-content: center; 
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       transition: background 0.2s;
+      transform: translate(130px, -138px);
     }
     .circle-audio-btn:hover {
       background: #4b4bb6;
@@ -389,9 +390,9 @@
     <h1 style="transform: translate(-10px, -310px); text-align: right;">Hello, I'm Meosssy!</h1>
     <img src="banner1.jpg" class="banner1-img" style="transform: translate(284px, -300px); pointer-events: none;">
     <div class="FavT">
-      <h2 style="transform: translate(0px, 0px); text-align: center;">My fav music >^<</h2>
+      <h2 style="transform: translate(0px, 5px); text-align: center;">My fav music >^<</h2>
       <img src="AFT.jpg" class="AFT">
-      <h1 style="transform: translate(-30px, -86px); text-align: center;">The Knife Dance</h1>
+      <h1 style="transform: translate(0px, -86px); text-align: center;">The Knife Dance</h1>
       <audio id="knife-audio" src="TheKnifeDance.mp3"></audio>
       <button id="circle-audio-btn" class="circle-audio-btn">
         <span id="circle-audio-icon">&#9658;</span>
@@ -515,9 +516,15 @@
     audio.onended = function() {
       icon.innerHTML = '&#9658;'; // Сброс до play после окончания
     };
-    </script>
+  </script>
+  <script>
+    const audio = document.getElementById('knife-audio');
+    audio.volume = 0.3; // 30%
+  </script>
+
 </body>
 </html>
+
 
 
 
