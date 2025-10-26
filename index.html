@@ -307,6 +307,25 @@
       display: block;
       pointer-events: none;
     }
+    .circle-audio-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      background: #26268a; /* любой цвет */
+      color: white;
+      cursor: pointer;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: background 0.2s;
+    }
+    .circle-audio-btn:hover {
+      background: #4b4bb6;
+    }
+
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
       .volume-panel { min-width: 90px; padding: 6px 8px; }
@@ -479,8 +498,27 @@
       isDragging = false;
     });
   </script>
+  <script>
+    const audio = document.getElementById('knife-audio');
+    const btn = document.getElementById('circle-audio-btn');
+    const icon = document.getElementById('circle-audio-icon');
+    
+    btn.onclick = function() {
+      if (audio.paused) {
+        audio.play();
+        icon.innerHTML = '&#10074;&#10074;'; // Пауза ▌▌
+      } else {
+        audio.pause();
+        icon.innerHTML = '&#9658;'; // Воспроизведение ►
+      }
+    };
+    audio.onended = function() {
+      icon.innerHTML = '&#9658;'; // Сброс до play после окончания
+    };
+    </script>
 </body>
 </html>
+
 
 
 
