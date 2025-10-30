@@ -38,7 +38,7 @@
     }
     .container {
       max-width: 750px;
-      height: 700px;
+      height: 400px;
       width: 100%;
       background: linear-gradient(to bottom, rgba(8, 85, 133, 0.8), rgba(94, 0, 138, 0.8));
       padding: 30px;
@@ -274,7 +274,7 @@
       align-items: center;
       height: 50px;
       width: 700px;
-      transform: translate(-5px, 45px);
+      transform: translate(-5px, -260px);
       background: #500887;
       border-radius: 14px;
       border: 5px solid #6c00d5;
@@ -287,12 +287,12 @@
       text-align: left;
     }
     .FavT {
-      width: 700px;
+      width: 420px;
       height: 120px;
       background: #2a1040;
       border-radius: 12px;
       box-shadow: 0 0 12px #c78cdd, 0 0 24px #b978f7;
-      transform: translate(-5px, 30px);
+      transform: translate(285px, -285px);
       border: 2px solid #c69eed;
     }
     .AFT {
@@ -313,7 +313,7 @@
       height: 60px;
       border-radius: 50%;
       border: none;
-      background: #26268a; /* любой цвет */
+      background: #26268a;
       color: white;
       cursor: pointer;
       font-size: 30px;
@@ -322,7 +322,7 @@
       justify-content: center; 
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
       transition: background 0.2s;
-      transform: translate(130px, -138px);
+      transform: translate(123px, -140px);
     }
     .circle-audio-btn:hover {
       background: #4b4bb6;
@@ -390,9 +390,9 @@
     <h1 style="transform: translate(-10px, -310px); text-align: right;">Hello, I'm Meosssy!</h1>
     <img src="banner1.jpg" class="banner1-img" style="transform: translate(284px, -300px); pointer-events: none;">
     <div class="FavT">
-      <h2 style="transform: translate(0px, 5px); text-align: center;">My fav music >^<</h2>
+      <h2 style="transform: translate(60px, 5px); text-align: center;">My fav music >^<</h2>
       <img src="AVATARF.png" class="AFT">
-      <h1 style="transform: translate(0px, -86px); text-align: center;">Broken Halo</h1>
+      <h1 style="transform: translate(90px, -88px); text-align: center;">Broken Halo</h1>
       <audio id="knife-audio" src="BrokenHalo.mp3"></audio>
       <button id="circle-audio-btn" class="circle-audio-btn">
         <span id="circle-audio-icon">&#9658;</span>
@@ -507,14 +507,14 @@
     btn.onclick = function() {
       if (audio.paused) {
         audio.play();
-        icon.innerHTML = '&#10074;&#10074;'; // Пауза ▌▌
+        icon.innerHTML = '&#10074;&#10074;';
       } else {
         audio.pause();
-        icon.innerHTML = '&#9658;'; // Воспроизведение ►
+        icon.innerHTML = '&#9658;';
       }
     };
     audio.onended = function() {
-      icon.innerHTML = '&#9658;'; // Сброс до play после окончания
+      icon.innerHTML = '&#9658;';
     };
   </script>
   <script>
@@ -550,6 +550,7 @@
   </script>
 </body>
 </html>
+
 
 
 
