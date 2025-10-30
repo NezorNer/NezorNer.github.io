@@ -1,3 +1,4 @@
+@@ -1,614 +1,616 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -391,7 +392,7 @@
       <span class="volume-percentage" id="volumePercent">30%</span>
     </div>
   </div>
-  
+
   <div class="credit-text">Edit by Suni on YT</div>
   <div class="container">
     <div class="discord-like">
@@ -416,7 +417,6 @@
       <h2 style="transform: translate(0px, 5px); text-align: center;">My fav media :3c</h2>
       <div class="media-track">
         <img src="SleepUziN.jpg" class="media-item">
-        <img src="3.png" class="media-item">
       </div>
     </div>
     <div class="FavT">
@@ -432,7 +432,7 @@
       <span class="goldman-left">Socials</span>
     </div>
   </div>
-  
+
   <script>
     const video = document.getElementById('background-video');
     const volumeCircle = document.getElementById('volumeCircle');
@@ -442,15 +442,15 @@
     const loadingScreen = document.getElementById('loading-screen');
     const loadingPercent = document.getElementById('loading-percent');
     const entryScreen = document.getElementById('entry-screen');
-    
+
     let isMuted = false;
     let isDragging = false;
     let videoLoaded = false;
-    
+
     video.volume = 0.3;
     volumeFill.style.width = '30%';
     volumePercent.textContent = '30%';
-    
+
     video.addEventListener('progress', function() {
       if (video.buffered.length > 0) {
         const bufferedEnd = video.buffered.end(video.buffered.length - 1);
@@ -458,7 +458,7 @@
         if (duration > 0) {
           const percent = Math.round((bufferedEnd / duration) * 100);
           loadingPercent.textContent = percent + '%';
-          
+
           if (percent >= 100 && !videoLoaded) {
             videoLoaded = true;
             loadingScreen.style.display = 'none';
@@ -467,7 +467,7 @@
         }
       }
     });
-    
+
     video.addEventListener('canplaythrough', function() {
       if (!videoLoaded) {
         videoLoaded = true;
@@ -478,13 +478,13 @@
         }, 300);
       }
     });
-    
+
     entryScreen.addEventListener('click', function() {
       video.muted = false;
       video.play();
       entryScreen.style.display = 'none';
     });
-    
+
     volumeCircle.addEventListener('click', function() {
       isMuted = !isMuted;
       video.muted = isMuted;
@@ -492,7 +492,7 @@
       volumeFill.style.width = isMuted ? '0%' : (video.volume * 100) + '%';
       volumePercent.textContent = isMuted ? '0%' : Math.round(video.volume * 100) + '%';
     });
-    
+
     function changeVolume(e) {
       const rect = volumeSlider.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -500,7 +500,7 @@
       video.volume = Math.max(0, Math.min(1, percentage));
       volumeFill.style.width = (video.volume * 100) + '%';
       volumePercent.textContent = Math.round(video.volume * 100) + '%';
-      
+
       if (video.volume === 0) {
         video.muted = true;
         isMuted = true;
@@ -511,20 +511,20 @@
         volumeCircle.textContent = '🔊';
       }
     }
-    
+
     volumeSlider.addEventListener('click', changeVolume);
-    
+
     volumeSlider.addEventListener('mousedown', function(e) {
       isDragging = true;
       changeVolume(e);
     });
-    
+
     document.addEventListener('mousemove', function(e) {
       if (isDragging) {
         changeVolume(e);
       }
     });
-    
+
     document.addEventListener('mouseup', function() {
       isDragging = false;
     });
@@ -533,7 +533,7 @@
     const audio = document.getElementById('knife-audio');
     const btn = document.getElementById('circle-audio-btn');
     const icon = document.getElementById('circle-audio-icon');
-    
+
     btn.onclick = function() {
       if (audio.paused) {
         audio.play();
@@ -555,7 +555,7 @@
     let dragging = false;
     let currentSlide = 0;
     const items = document.querySelectorAll('.media-item');
-    
+
     track.addEventListener('mousedown', (e) => {
       dragging = true;
       startX = e.pageX;
@@ -580,39 +580,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
