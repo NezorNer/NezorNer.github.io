@@ -334,7 +334,20 @@
       box-shadow: 0 0 12px #c78cdd, 0 0 24px #b978f7;
       transform: translate(284px, -285px);
       border: 2px solid #c69eed;
-      overflow: auto;
+      overflow: hidden;
+      position: relative;
+    ]
+    .media-track {
+      display: flex;
+      transition: transform 0.3s;
+      cursor: grab;
+    }
+    .media-item {
+      flex: 0 0 100%;
+      object-fit: cover;
+      height: 100%;
+      user-select: none;
+      pointer-events: none;
     }
     @media only screen and (max-width:600px){
       .volume-circle { width: 36px; height: 36px; font-size: 19px; }
@@ -400,6 +413,9 @@
     <img src="banner1.jpg" class="banner1-img" style="transform: translate(284px, -300px); pointer-events: none;">
     <div class="media">
       <h2 style="transform: translate(0px, 5px); text-align: center;">My fav media :3c</h2>
+      <div class="media-track">
+        <img src="SleepUziN.jpg" class="media-item">
+      </div>
     </div>
     <div class="FavT">
       <h2 style="transform: translate(0px, 5px); text-align: center;">My fav music >^<</h2>
@@ -529,8 +545,40 @@
       icon.innerHTML = '&#9658;'; // Сброс до play после окончания
     };
   </script>
+  <script>
+    const track = document.querySelector('.media-track');
+    let startX = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let dragging = false;
+    let currentSlide = 0;
+    const items = document.querySelectorAll('.media-item');
+    
+    track.addEventListener('mousedown', (e) => {
+      dragging = true;
+      startX = e.pageX;
+      track.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const dx = e.pageX - startX;
+      track.style.transform = `translateX(${prevTranslate + dx}px)`;
+    });
+    window.addEventListener('mouseup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      track.style.cursor = 'grab';
+      const dx = e.pageX - startX;
+      if (dx < -100 && currentSlide < items.length - 1) currentSlide++;
+      if (dx > 100 && currentSlide > 0) currentSlide--;
+      currentTranslate = -currentSlide * track.offsetWidth;
+      track.style.transform = `translateX(${currentTranslate}px)`;
+      prevTranslate = currentTranslate;
+    });
+  </script>
 </body>
 </html>
+
 
 
 
