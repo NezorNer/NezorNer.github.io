@@ -52,6 +52,7 @@
       z-index: 1;
       color: #BAC0DE;
       backdrop-filter: blur(16px)
+      transition: opacity 0.5s;
     }
     .container::before {
       content: '';
@@ -548,8 +549,29 @@
       prevTranslate = currentTranslate;
     });
   </script>
+  <script>
+    let timer;
+    const container = document.querySelector('.container');
+    
+    function hideContainer() {
+      container.style.opacity = '0';
+      container.style.pointerEvents = 'none';
+    }
+    function showContainer() {
+      container.style.opacity = '1';
+      container.style.pointerEvents = '';
+    }
+    function resetTimer() {
+        showContainer();
+      clearTimeout(timer);
+      timer = setTimeout(hideContainer, 5000);
+    }
+    document.addEventListener('mousemove', resetTimer);
+    resetTimer();
+    </script>
 </body>
 </html>
+
 
 
 
