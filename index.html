@@ -52,7 +52,7 @@
       z-index: 1;
       color: #BAC0DE;
       backdrop-filter: blur(16px)
-      transition: opacity 0.5s;
+      transition: opacity 1s;
     }
     .container::before {
       content: '';
@@ -564,13 +564,14 @@
     function resetTimer() {
         showContainer();
       clearTimeout(timer);
-      timer = setTimeout(hideContainer, 5000);
+      timer = setTimeout(hideContainer, 4000);
     }
     document.addEventListener('mousemove', resetTimer);
     resetTimer();
     </script>
 </body>
 </html>
+
 
 
 
