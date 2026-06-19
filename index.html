@@ -197,7 +197,7 @@
       transform: translateY(0);
     }
 
-    /* --- СТИЛИ КОНСОЛИ --- */
+    /* --- СТАТУС-ЛОГИ КОНСОЛИ --- */
     #consoleOutput {
       width: 100%;
       height: 100%;
@@ -215,6 +215,39 @@
     .console-log .status-warn { color: #ffaa00; }
 
 
+    /* --- ШАПКИ ДЛЯ ОСТАВШИХСЯ ОКН --- */
+    .window-header {
+      height: 30px;
+      background-color: #230530;
+      border-bottom: 2px solid #5d1f7a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 15px;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      box-sizing: border-box;
+    }
+
+    .window-title {
+      font-size: 11px;
+      color: #a47cb8;
+      letter-spacing: 1px;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .window-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #5d1f7a;
+      opacity: 0.6;
+    }
+
     /* --- СТРУКТУРА НОВЫХ ОКН --- */
     .final-interface {
       display: none; 
@@ -230,14 +263,20 @@
       opacity: 1;
     }
 
+    /* Стиль для приветственного и правого окон */
+    .sub-window {
+      background-color: #2b083a; 
+      border: 2px solid #5d1f7a;
+      border-radius: 18px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
     /* Приветственное окно (Верхнее) */
     .welcome-box {
       height: 30%; 
       margin-top: 15px; 
-      background-color: #2b083a; 
-      border: 2px solid #5d1f7a; /* Обводка теперь как у главного окна */
-      border-radius: 18px;
-      box-sizing: border-box;
     }
 
     /* Секция под приветственным окном */
@@ -250,7 +289,7 @@
       margin-bottom: 5px;
     }
 
-    /* Левое пространство для анкеты */
+    /* Левое пустое пространство для анкеты (Окно убрано) */
     .left-spacer {
       flex: 4; 
       display: flex;
@@ -269,7 +308,7 @@
       font-size: 16px;
       letter-spacing: 0.5px;
       width: 100%;
-      max-width: 280px; /* Чтобы строки стояли ровно друг под другом */
+      max-width: 280px; 
     }
 
     .profile-form p {
@@ -282,16 +321,12 @@
     }
 
     .form-value {
-      color: #a47cb8; /* Временный цвет для ваших будущих ответов */
+      color: #a47cb8; 
     }
 
     /* Правое окно */
     .right-box {
       flex: 6; 
-      background-color: #2b083a;
-      border: 2px solid #5d1f7a; /* Обводка теперь как у главного окна */
-      border-radius: 18px;
-      box-sizing: border-box;
     }
   </style>
 </head>
@@ -303,7 +338,6 @@
 
     <div class="content-layout">
       
-      <!-- ЛЕВАЯ ПАНЕЛЬ -->
       <aside class="sidebar">
         <div class="sidebar-item-wrapper">
           <div class="home-button">
@@ -315,33 +349,37 @@
         </div>
       </aside>
 
-      <!-- ПРАВАЯ ЧАСТЬ -->
       <main class="content-wrapper">
         
-        <!-- Блок вывода консоли -->
         <div id="consoleOutput"></div>
 
-        <!-- Блок нового интерфейса -->
         <div id="finalInterface" class="final-interface">
           
-          <!-- Верхнее окно приветствия -->
-          <div class="welcome-box"></div>
+          <div class="welcome-box sub-window">
+            <div class="window-header">
+              <span class="window-title">sys // welcome.sh</span>
+              <div class="window-dots"><span></span><span></span><span></span></div>
+            </div>
+          </div>
           
-          <!-- Нижняя зона разметки -->
           <div class="bottom-section">
             
-            <!-- Левое пространство с Анкетой -->
             <div class="left-spacer">
               <div class="profile-form">
-                <p><span class="form-label">_Nickname:</span> <span class="form-value">Meossy</span></p>
-                <p><span class="form-label">_Gender:</span> <span class="form-value">Bi</span></p>
-                <p><span class="form-label">_Age:</span> <span class="form-value">18</span></p>
-                <p><span class="form-label">_Hobby:</span>
+                <p><span class="form-label">_nickname:</span> <span class="form-value">your_name</span></p>
+                <p><span class="form-label">_gender:</span> <span class="form-value">your_gender</span></p>
+                <p><span class="form-label">_age:</span> <span class="form-value">your_age</span></p>
+                <p><span class="form-label">_status:</span> <span class="form-value">online</span></p>
+                <p><span class="form-label">_hobby:</span> <span class="form-value">coding</span></p>
               </div>
             </div> 
 
-            <!-- Правое окно -->
-            <div class="right-box"></div>   
+            <div class="right-box sub-window">
+              <div class="window-header">
+                <span class="window-title">sys // main_logs</span>
+                <div class="window-dots"><span></span><span></span><span></span></div>
+              </div>
+            </div>   
           </div>
 
         </div>
