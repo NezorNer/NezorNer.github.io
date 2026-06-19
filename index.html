@@ -67,7 +67,7 @@
       overflow: hidden;
     }
 
-    /* Стартовый текст */
+    /* --- СТАРТОВЫЙ ТЕКСТ --- */
     .click-to-open {
       margin: 0;
       font-size: 32px;
@@ -95,7 +95,6 @@
       gap: 15px;
     }
 
-    /* Контейнер-обертка для иконки и её подсказки */
     .sidebar-item-wrapper {
       position: relative;
       display: flex;
@@ -132,12 +131,11 @@
       fill: #ffffff;
     }
 
-    /* --- ВСПЛЫВАЮЩЕЕ ОКНО (ТУЛТИП) --- */
+    /* --- ТУЛТИП --- */
     .sidebar-tooltip {
       position: absolute;
       left: 65px;
       white-space: nowrap;
-      
       background-color: #22052e; 
       border: 1px solid #420d59;
       color: #ffffff;
@@ -146,11 +144,9 @@
       font-size: 14px;
       letter-spacing: 0.5px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      
       opacity: 0;
       visibility: hidden;
       transform: translateX(-10px);
-      
       transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
       z-index: 10;
     }
@@ -180,11 +176,11 @@
       padding: 25px;
       box-sizing: border-box;
       overflow-y: auto;
-      /* Плавный скролл при автоматической прокрутке вниз */
       scroll-behavior: smooth; 
+      position: relative;
     }
 
-    /* Общая обертка для плавной анимации появления содержимого */
+    /* Общая обертка контента */
     .content-layout {
       display: flex;
       width: 100%;
@@ -201,21 +197,72 @@
       transform: translateY(0);
     }
 
-    /* Стилизация компактной консоли */
+    /* --- СТИЛИ КОНСОЛИ --- */
+    #consoleOutput {
+      width: 100%;
+      height: 100%;
+    }
+
     .console-log {
-      margin: 0 0 4px 0;   /* Минимальный отступ между строками */
-      font-size: 13px;     /* Уменьшенный размер текста */
-      line-height: 16px;   /* Компактная высота строки */
+      margin: 0 0 4px 0;   
+      font-size: 13px;     
+      line-height: 16px;   
       color: #e2c7f5;
       word-break: break-all;
     }
 
-    /* Акцент на системные теги консоли */
-    .console-log .status-ok {
-      color: #00b06f;
+    .console-log .status-ok { color: #00b06f; }
+    .console-log .status-warn { color: #ffaa00; }
+
+
+    /* --- СТРУКТУРА НОВЫХ ОКН (ПОСЛЕ КОНСОЛИ) --- */
+    .final-interface {
+      display: none; /* Переключится на flex через JS */
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 0.6s ease;
     }
-    .console-log .status-warn {
-      color: #ffaa00;
+
+    /* Класс для плавного проявления новых окон */
+    .final-interface.visible {
+      opacity: 1;
+    }
+
+    /* Приветственное окно (Верхнее) */
+    .welcome-box {
+      height: 30%; /* Меньше половины основного окна */
+      margin-top: 15px; /* Отступ немного вниз */
+      background-color: #2b083a; /* Тот же цвет, гармонирующий с дизайном */
+      border: 2px solid #420d59;
+      border-radius: 18px;
+      box-sizing: border-box;
+    }
+
+    /* Секция под приветственным окном */
+    .bottom-section {
+      display: flex;
+      flex: 1; /* Занимает всю оставшуюся высоту */
+      margin-top: 20px; /* Свободное место между верхним и нижними блоками */
+      gap: 20px;
+      min-height: 0; 
+      margin-bottom: 5px;
+    }
+
+    /* Левое пустое пространство для будущей основной информации */
+    .left-spacer {
+      flex: 4; /* Занимает 40% ширины от нижней зоны */
+    }
+
+    /* Правое окно */
+    .right-box {
+      flex: 6; /* Занимает 60% ширины (чуть больше половины основного пространства) */
+      background-color: #2b083a;
+      border: 2px solid #420d59;
+      border-radius: 18px;
+      box-sizing: border-box;
     }
   </style>
 </head>
@@ -238,7 +285,20 @@
         </div>
       </aside>
 
-      <main class="content-wrapper" id="consoleOutput"></main>
+      <main class="content-wrapper">
+        
+        <div id="consoleOutput"></div>
+
+        <div id="finalInterface" class="final-interface">
+          
+          <div class="welcome-box"></div>
+          
+          <div class="bottom-section">
+            <div class="left-spacer"></div> <div class="right-box"></div>   </div>
+
+        </div>
+
+      </main>
 
     </div>
 
@@ -247,8 +307,9 @@
   <script>
     const container = document.getElementById('mainContainer');
     const consoleOutput = document.getElementById('consoleOutput');
+    const finalInterface = document.getElementById('finalInterface');
 
-    // Массив из 20 подробных строк загрузки
+    // Оставили ровно первые 10 строк консоли, удалив последние 10
     const logLines = [
       'INITIALIZING MEOSSY-CORE TERMINAL V2.4.0-RELEASE...',
       '[ INFO ] Checking kernel integrity sub-sectors... <span class="status-ok">SECURE</span>',
@@ -259,100 +320,91 @@
       '[ DB ] Allocating static local cache for "Base Info" module...',
       '[ INFO ] Parsing central configuration asset: ./config.json... OK',
       '[ INFO ] Optimizing application layout engine (Flexbox active)...',
-      '[ WARN ] Font file "Terminus-Bold.ttf" loaded from cache. <span class="status-warn">CACHED</span>',
-      '[ INFO ] Verifying master cryptographic SSH signatures... Valid',
-      '[ LOAD ] Injecting global styling matrix from module: layout.css...',
-      '[ LOAD ] Compiling asynchronous client runtime scripts... 100%',
-      '[ INFO ] Syncing Discord-style responsive sidebar constraints...',
-      '[ INFO ] Attaching hardware-accelerated listeners to .home-button...',
-      '[ INFO ] Pre-calculating z-index collision layers for tooltips...',
-      '[ DB ] Fetching compressed server payload metrics from cluster...',
-      '[ INFO ] Unpacking structural nodes: text/html, text/css, image/svg...',
-      '[ STATUS ] Hypervisor boot finished with 0 critical errors and 1 warning.',
-      '[ READY ] Environment setup complete. Mounting user payload interface...'
+      '[ WARN ] Font file "Terminus-Bold.ttf" loaded from cache. <span class="status-warn">CACHED</span>'
     ];
 
-  container.addEventListener('click', function(e) {
-    if (!container.classList.contains('expanded')) {
-      container.classList.add('expanded');
-      // Запуск через 1000мс после клика (окно полностью открыто)
-      setTimeout(startConsoleLoading, 1000);
-    }
-  });
-
-  function startConsoleLoading() {
-    let currentLine = 0;
-
-    function printNextLine() {
-      if (currentLine < logLines.length) {
-        // Запускаем побуквенную печать для текущей строки
-        typeLine(logLines[currentLine], consoleOutput, () => {
-          currentLine++;
-          // Небольшая задержка перед началом печати следующей строки (80мс)
-          setTimeout(printNextLine, 80);
-        });
-      } else {
-        // Когда все 20 строк напечатались, ждем 2 секунды перед очисткой
-        setTimeout(clearConsole, 2000);
+    container.addEventListener('click', function(e) {
+      if (!container.classList.contains('expanded')) {
+        container.classList.add('expanded');
+        setTimeout(startConsoleLoading, 1000);
       }
+    });
+
+    function startConsoleLoading() {
+      let currentLine = 0;
+
+      function printNextLine() {
+        if (currentLine < logLines.length) {
+          typeLine(logLines[currentLine], consoleOutput, () => {
+            currentLine++;
+            setTimeout(printNextLine, 80);
+          });
+        } else {
+          // Ждем 1.5 секунды после завершения 10 строк и убираем консоль
+          setTimeout(clearConsole, 1500);
+        }
+      }
+
+      printNextLine();
     }
 
-    printNextLine();
-  }
+    function typeLine(lineText, container, callback) {
+      const p = document.createElement('p');
+      p.className = 'console-log';
+      p.innerHTML = '>&nbsp;'; 
+      container.appendChild(p);
 
-  // Функция побуквенного вывода, защищенная от разрыва HTML-тегов (<span...>)
-  function typeLine(lineText, container, callback) {
-    const p = document.createElement('p');
-    p.className = 'console-log';
-    p.innerHTML = '>&nbsp;'; // Префикс консоли
-    container.appendChild(p);
-
-    let i = 0;
-    function type() {
-      if (i < lineText.length) {
-        // Если натыкаемся на тег (например, <span...>), печатаем его целиком мгновенно, чтобы не ломать разметку
-        if (lineText[i] === '<') {
-          let closingTagIdx = lineText.indexOf('>', i);
-          if (closingTagIdx !== -1) {
-            p.innerHTML = '>&nbsp;' + lineText.substring(0, closingTagIdx + 1);
-            i = closingTagIdx + 1;
+      let i = 0;
+      function type() {
+        if (i < lineText.length) {
+          if (lineText[i] === '<') {
+            let closingTagIdx = lineText.indexOf('>', i);
+            if (closingTagIdx !== -1) {
+              p.innerHTML = '>&nbsp;' + lineText.substring(0, closingTagIdx + 1);
+              i = closingTagIdx + 1;
+            } else {
+              p.innerHTML = '>&nbsp;' + lineText.substring(0, i + 1);
+              i++;
+            }
           } else {
             p.innerHTML = '>&nbsp;' + lineText.substring(0, i + 1);
             i++;
           }
+          
+          const wrapper = consoleOutput.parentElement;
+          wrapper.scrollTop = wrapper.scrollHeight;
+          
+          setTimeout(type, 10); 
         } else {
-          // Обычный символ печатаем пошагово
-          p.innerHTML = '>&nbsp;' + lineText.substring(0, i + 1);
-          i++;
+          callback();
         }
-        
-        // Автопрокрутка контейнера вниз по мере добавления букв
-        container.scrollTop = container.scrollHeight;
-        
-        // Скорость печати букв (10мс). Можно увеличить, если хотите медленнее.
-        setTimeout(type, 10); 
-      } else {
-        callback();
       }
+      type();
     }
-    type();
-  }
 
-  function clearConsole() {
-    const elements = consoleOutput.querySelectorAll('.console-log');
-    
-    // Плавное растворение строк вверх при очистке
-    elements.forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(-5px)';
-      el.style.transition = 'all 0.4s ease';
-    });
+    function clearConsole() {
+      const elements = consoleOutput.querySelectorAll('.console-log');
+      
+      elements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-5px)';
+        el.style.transition = 'all 0.4s ease';
+      });
 
-    setTimeout(() => {
-      consoleOutput.innerHTML = '';
-      // Консоль успешно очищена, окно полностью готово к вашей будущей информации!
-    }, 400);
-  }
+      setTimeout(() => {
+        // Полностью удаляем консоль из разметки
+        consoleOutput.style.display = 'none';
+        
+        // Включаем отображение сетки новых окон и плавно проявляем их
+        finalInterface.style.display = 'flex';
+        
+        // Микротаймаут для активации CSS-перехода opacity
+        setTimeout(() => {
+          finalInterface.classList.add('visible');
+        }, 50);
+        
+      }, 400);
+    }
   </script>
 </body>
 </html>
