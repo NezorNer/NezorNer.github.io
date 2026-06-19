@@ -215,7 +215,7 @@
     .console-log .status-warn { color: #ffaa00; }
 
 
-    /* --- ШАПКИ ДЛЯ ОСТАВШИХСЯ ОКН --- */
+    /* --- ШАПКИ ДЛЯ ОКН --- */
     .window-header {
       height: 30px;
       background-color: #230530;
@@ -284,49 +284,56 @@
       display: flex;
       flex: 1; 
       margin-top: 20px; 
-      gap: 20px;
+      gap: 25px;
       min-height: 0; 
       margin-bottom: 5px;
     }
 
-    /* Левое пустое пространство для анкеты (Окно убрано) */
+    /* Левое пустое пространство для анкеты */
     .left-spacer {
-      flex: 4; 
+      flex: 4.5; 
       display: flex;
       flex-direction: column;
-      justify-content: center; /* Центрирование по вертикали */
-      align-items: center;     /* Центрирование по горизонтали */
+      justify-content: center; 
+      align-items: center;     
       box-sizing: border-box;
       padding: 10px;
     }
 
-    /* Стилизация анкетного блока */
+    /* Стилизация красивого анкетного блока */
     .profile-form {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      font-size: 16px;
-      letter-spacing: 0.5px;
+      gap: 10px;                  /* Аккуратный отступ между строками */
+      font-size: 15px;            /* Совсем немного больше, чем было (14px) */
+      letter-spacing: 0.7px;
       width: 100%;
-      max-width: 280px; 
+      max-width: 320px; 
+      
+      background: rgba(93, 31, 122, 0.12); /* Элегантный полупрозрачный фон */
+      border-left: 3px solid #5d1f7a;      /* Акцентная линия слева */
+      padding: 18px 22px;
+      border-radius: 0 16px 16px 0;
+      box-sizing: border-box;
     }
 
     .profile-form p {
       margin: 0;
-      line-height: 20px;
+      line-height: 22px;
     }
 
     .form-label {
       color: #ffffff;
+      font-weight: bold;
     }
 
     .form-value {
-      color: #a47cb8; 
+      color: #b58ecb; /* Приятный пастельный сиреневый для ваших будущих ответов */
     }
 
     /* Правое окно */
     .right-box {
-      flex: 6; 
+      flex: 5.5; 
     }
   </style>
 </head>
@@ -366,11 +373,15 @@
             
             <div class="left-spacer">
               <div class="profile-form">
-                <p><span class="form-label">_nickname:</span> <span class="form-value">your_name</span></p>
-                <p><span class="form-label">_gender:</span> <span class="form-value">your_gender</span></p>
-                <p><span class="form-label">_age:</span> <span class="form-value">your_age</span></p>
-                <p><span class="form-label">_status:</span> <span class="form-value">online</span></p>
-                <p><span class="form-label">_hobby:</span> <span class="form-value">coding</span></p>
+                <p><span class="form-label">Nickname:</span> <span class="form-value">your_name</span></p>
+                <p><span class="form-label">Gender:</span> <span class="form-value">your_gender</span></p>
+                <p><span class="form-label">Age:</span> <span class="form-value">your_age</span></p>
+                <p><span class="form-label">Location:</span> <span class="form-value">your_city</span></p>
+                <p><span class="form-label">Languages:</span> <span class="form-value">ru / en</span></p>
+                <p><span class="form-label">Status:</span> <span class="form-value">online</span></p>
+                <p><span class="form-label">Hobby:</span> <span class="form-value">coding</span></p>
+                <p><span class="form-label">Skills:</span> <span class="form-value">html / css / js</span></p>
+                <p><span class="form-label">About:</span> <span class="form-value">hello world...</span></p>
               </div>
             </div> 
 
