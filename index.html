@@ -289,7 +289,7 @@
       margin-bottom: 5px;
     }
 
-    /* Левое пустое пространство для анкеты */
+    /* ЛЕВОЕ ПРОСТРАНСТВО (Добавлена сетка и рамка для заполнения пустоты) */
     .left-spacer {
       flex: 4.5; 
       display: flex;
@@ -297,24 +297,73 @@
       justify-content: center; 
       align-items: center;     
       box-sizing: border-box;
-      padding: 10px;
+      padding: 20px;
+      position: relative;
+      
+      /* Мягкая фоновая Sci-Fi сетка */
+      background-image: 
+        linear-gradient(rgba(93, 31, 122, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(93, 31, 122, 0.04) 1px, transparent 1px);
+      background-size: 20px 20px;
+      background-position: center;
+      
+      /* Тонкий технологический контур вокруг всей левой зоны */
+      border: 1px dashed rgba(93, 31, 122, 0.25);
+      border-radius: 16px;
+    }
+
+    /* Декоративные угловые маркеры (прицелы) */
+    .left-spacer::before, .left-spacer::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      opacity: 0.5;
+    }
+    /* Верхний левый и нижний правый уголки */
+    .left-spacer::before {
+      top: 10px; left: 10px;
+      border-top: 2px solid #5d1f7a;
+      border-left: 2px solid #5d1f7a;
+    }
+    .left-spacer::after {
+      bottom: 10px; right: 10px;
+      border-bottom: 2px solid #5d1f7a;
+      border-right: 2px solid #5d1f7a;
     }
 
     /* Стилизация красивого анкетного блока */
     .profile-form {
       display: flex;
       flex-direction: column;
-      gap: 10px;                  /* Аккуратный отступ между строками */
-      font-size: 15px;            /* Совсем немного больше, чем было (14px) */
+      gap: 10px;                  
+      font-size: 15px;            
       letter-spacing: 0.7px;
       width: 100%;
       max-width: 320px; 
       
-      background: rgba(93, 31, 122, 0.12); /* Элегантный полупрозрачный фон */
-      border-left: 3px solid #5d1f7a;      /* Акцентная линия слева */
-      padding: 18px 22px;
-      border-radius: 0 16px 16px 0;
+      background: rgba(35, 5, 48, 0.75); /* Плотный темный фон карточки */
+      border: 1px solid rgba(93, 31, 122, 0.6);
+      padding: 20px 22px;
+      border-radius: 12px;
       box-sizing: border-box;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+
+    /* Маленькие технические подписи сверху и снизу карточки для веса */
+    .form-header-tag {
+      font-size: 9px;
+      color: #5d1f7a;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .form-footer-tag {
+      font-size: 9px;
+      color: #00b06f;
+      margin-top: 6px;
+      letter-spacing: 1px;
     }
 
     .profile-form p {
@@ -328,7 +377,7 @@
     }
 
     .form-value {
-      color: #b58ecb; /* Приятный пастельный сиреневый для ваших будущих ответов */
+      color: #b58ecb; 
     }
 
     /* Правое окно */
@@ -372,7 +421,10 @@
           <div class="bottom-section">
             
             <div class="left-spacer">
+              
               <div class="profile-form">
+                <div class="form-header-tag">[ ID card // no. 77-A ]</div>
+                
                 <p><span class="form-label">Nickname:</span> <span class="form-value">your_name</span></p>
                 <p><span class="form-label">Gender:</span> <span class="form-value">your_gender</span></p>
                 <p><span class="form-label">Age:</span> <span class="form-value">your_age</span></p>
@@ -382,7 +434,10 @@
                 <p><span class="form-label">Hobby:</span> <span class="form-value">coding</span></p>
                 <p><span class="form-label">Skills:</span> <span class="form-value">html / css / js</span></p>
                 <p><span class="form-label">About:</span> <span class="form-value">hello world...</span></p>
+                
+                <div class="form-footer-tag">[ STATUS: SECURE LOCAL NODE ]</div>
               </div>
+              
             </div> 
 
             <div class="right-box sub-window">
