@@ -177,9 +177,11 @@
     /* --- ПРАВАЯ ЧАСТЬ (ОСНОВНОЙ КОНТЕНТ) --- */
     .content-wrapper {
       flex: 1;
-      padding: 30px;
+      padding: 25px;
       box-sizing: border-box;
       overflow-y: auto;
+      /* Плавный скролл при автоматической прокрутке вниз */
+      scroll-behavior: smooth; 
     }
 
     /* Общая обертка для плавной анимации появления содержимого */
@@ -193,28 +195,19 @@
       transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s, visibility 0.6s ease 0.4s;
     }
 
-    /* Активация анимации появления при раскрытии */
     .main-container.expanded .content-layout {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
     }
 
-    /* Стилизация вывода псевдо-консоли */
+    /* Стилизация компактной консоли */
     .console-log {
-      margin: 0 0 12px 0;
-      font-size: 18px;
-      line-height: 24px;
+      margin: 0 0 4px 0;   /* Минимальный отступ между строками */
+      font-size: 13px;     /* Уменьшенный размер текста */
+      line-height: 16px;   /* Компактная высота строки */
       color: #e2c7f5;
-      opacity: 0;
-      transform: translateY(5px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    /* Класс, который делает строчку лога видимой через JS */
-    .console-log.visible {
-      opacity: 1;
-      transform: translateY(0);
+      word-break: break-all;
     }
 
     /* Акцент на системные теги консоли */
@@ -230,33 +223,22 @@
 
   <div class="main-container" id="mainContainer">
     
-    <!-- Кнопка открытия -->
     <p class="click-to-open">Click to open</p>
 
-    <!-- Внутреннее устройство сайта -->
     <div class="content-layout">
       
-      <!-- ЛЕВАЯ ПАНЕЛЬ -->
       <aside class="sidebar">
-        
         <div class="sidebar-item-wrapper">
-          
           <div class="home-button">
             <svg viewBox="0 0 24 24">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
             </svg>
           </div>
-
           <div class="sidebar-tooltip">Base info</div>
-
         </div>
-
       </aside>
 
-      <!-- ПРАВАЯ ЧАСТЬ (ТЕКСТ УБРАН) -->
-      <main class="content-wrapper" id="consoleOutput">
-        <!-- Сюда скрипт будет последовательно выводить строки загрузки -->
-      </main>
+      <main class="content-wrapper" id="consoleOutput"></main>
 
     </div>
 
@@ -266,69 +248,111 @@
     const container = document.getElementById('mainContainer');
     const consoleOutput = document.getElementById('consoleOutput');
 
-    // Массив строк, которые будут имитировать загрузку консоли
+    // Массив из 20 подробных строк загрузки
     const logLines = [
-      'Connecting to Meossy secure server... <span class="status-ok">SUCCESS</span>',
-      'Fetching repository metadata... Done',
-      'Loading interface components... <span class="status-ok">OK</span>',
-      'Decrypting user profile info... <span class="status-warn">98%</span>',
-      'System initialization completed.'
+      'INITIALIZING MEOSSY-CORE TERMINAL V2.4.0-RELEASE...',
+      '[ INFO ] Checking kernel integrity sub-sectors... <span class="status-ok">SECURE</span>',
+      '[ INFO ] Loading system architecture environment variables... Done',
+      '[ LINK ] Establishing secure handshake with GitHub Remote API...',
+      '[ LINK ] Tunneling traffic through local SSL proxy gateway... <span class="status-ok">CONNECTED</span>',
+      '[ DB ] Mounting virtual memory block sequences... 0x7FFF8A20',
+      '[ DB ] Allocating static local cache for "Base Info" module...',
+      '[ INFO ] Parsing central configuration asset: ./config.json... OK',
+      '[ INFO ] Optimizing application layout engine (Flexbox active)...',
+      '[ WARN ] Font file "Terminus-Bold.ttf" loaded from cache. <span class="status-warn">CACHED</span>',
+      '[ INFO ] Verifying master cryptographic SSH signatures... Valid',
+      '[ LOAD ] Injecting global styling matrix from module: layout.css...',
+      '[ LOAD ] Compiling asynchronous client runtime scripts... 100%',
+      '[ INFO ] Syncing Discord-style responsive sidebar constraints...',
+      '[ INFO ] Attaching hardware-accelerated listeners to .home-button...',
+      '[ INFO ] Pre-calculating z-index collision layers for tooltips...',
+      '[ DB ] Fetching compressed server payload metrics from cluster...',
+      '[ INFO ] Unpacking structural nodes: text/html, text/css, image/svg...',
+      '[ STATUS ] Hypervisor boot finished with 0 critical errors and 1 warning.',
+      '[ READY ] Environment setup complete. Mounting user payload interface...'
     ];
 
-    container.addEventListener('click', function(e) {
-      if (!container.classList.contains('expanded')) {
-        container.classList.add('expanded');
-        
-        // Запускаем процесс логирования ровно через 1000мс после клика 
-        // (когда анимация раскрытия окна гарантированно завершится)
-        setTimeout(startConsoleLoading, 1000);
+  container.addEventListener('click', function(e) {
+    if (!container.classList.contains('expanded')) {
+      container.classList.add('expanded');
+      // Запуск через 1000мс после клика (окно полностью открыто)
+      setTimeout(startConsoleLoading, 1000);
+    }
+  });
+
+  function startConsoleLoading() {
+    let currentLine = 0;
+
+    function printNextLine() {
+      if (currentLine < logLines.length) {
+        // Запускаем побуквенную печать для текущей строки
+        typeLine(logLines[currentLine], consoleOutput, () => {
+          currentLine++;
+          // Небольшая задержка перед началом печати следующей строки (80мс)
+          setTimeout(printNextLine, 80);
+        });
+      } else {
+        // Когда все 20 строк напечатались, ждем 2 секунды перед очисткой
+        setTimeout(clearConsole, 2000);
       }
+    }
+
+    printNextLine();
+  }
+
+  // Функция побуквенного вывода, защищенная от разрыва HTML-тегов (<span...>)
+  function typeLine(lineText, container, callback) {
+    const p = document.createElement('p');
+    p.className = 'console-log';
+    p.innerHTML = '>&nbsp;'; // Префикс консоли
+    container.appendChild(p);
+
+    let i = 0;
+    function type() {
+      if (i < lineText.length) {
+        // Если натыкаемся на тег (например, <span...>), печатаем его целиком мгновенно, чтобы не ломать разметку
+        if (lineText[i] === '<') {
+          let closingTagIdx = lineText.indexOf('>', i);
+          if (closingTagIdx !== -1) {
+            p.innerHTML = '>&nbsp;' + lineText.substring(0, closingTagIdx + 1);
+            i = closingTagIdx + 1;
+          } else {
+            p.innerHTML = '>&nbsp;' + lineText.substring(0, i + 1);
+            i++;
+          }
+        } else {
+          // Обычный символ печатаем пошагово
+          p.innerHTML = '>&nbsp;' + lineText.substring(0, i + 1);
+          i++;
+        }
+        
+        // Автопрокрутка контейнера вниз по мере добавления букв
+        container.scrollTop = container.scrollHeight;
+        
+        // Скорость печати букв (10мс). Можно увеличить, если хотите медленнее.
+        setTimeout(type, 10); 
+      } else {
+        callback();
+      }
+    }
+    type();
+  }
+
+  function clearConsole() {
+    const elements = consoleOutput.querySelectorAll('.console-log');
+    
+    // Плавное растворение строк вверх при очистке
+    elements.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(-5px)';
+      el.style.transition = 'all 0.4s ease';
     });
 
-    function startConsoleLoading() {
-      let currentLine = 0;
-
-      function printNextLine() {
-        if (currentLine < logLines.length) {
-          // Создаем новый элемент абзаца для строки лога
-          const p = document.createElement('p');
-          p.className = 'console-log';
-          p.innerHTML = `> ${logLines[currentLine]}`;
-          consoleOutput.appendChild(p);
-
-          // Делаем микро-задержку для анимации появления строки через CSS
-          setTimeout(() => {
-            p.classList.add('visible');
-          }, 50);
-
-          currentLine++;
-          // Интервал между появлением новых строчек логов (500 миллисекунд)
-          setTimeout(printNextLine, 500);
-        } else {
-          // Когда все строки напечатаны, ждем 1.5 секунды и очищаем экран
-          setTimeout(clearConsole, 1500);
-        }
-      }
-
-      printNextLine();
-    }
-
-    function clearConsole() {
-      const elements = consoleOutput.querySelectorAll('.console-log');
-      
-      // Плавно скрываем все элементы консоли назад
-      elements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(-5px)';
-        el.style.transition = 'all 0.4s ease';
-      });
-
-      // Полностью удаляем их из HTML структуры после завершения анимации исчезновения
-      setTimeout(() => {
-        consoleOutput.innerHTML = '';
-        // Логи исчезли. Окно готово для вставки будущей финальной информации!
-      }, 400);
-    }
+    setTimeout(() => {
+      consoleOutput.innerHTML = '';
+      // Консоль успешно очищена, окно полностью готово к вашей будущей информации!
+    }, 400);
+  }
   </script>
 </body>
 </html>
