@@ -97,7 +97,7 @@
 
     /* Контейнер-обертка для иконки и её подсказки */
     .sidebar-item-wrapper {
-      position: relative; /* Чтобы подсказка позиционировалась относительно этого элемента */
+      position: relative;
       display: flex;
       align-items: center;
     }
@@ -107,13 +107,12 @@
       width: 50px;
       height: 50px;
       background-color: #6a248a;
-      border-radius: 50%; /* Всегда круглая */
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       
-      /* Добавляем transform в плавный переход */
       transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
@@ -124,10 +123,9 @@
       transition: fill 0.2s ease;
     }
 
-    /* Эффект при наведении: легкое увеличение и смена цвета */
     .home-button:hover {
       background-color: #5d1f7a; 
-      transform: scale(1.1); /* Увеличение размера на 10% */
+      transform: scale(1.1);
     }
 
     .home-button:hover svg {
@@ -137,10 +135,9 @@
     /* --- ВСПЛЫВАЮЩЕЕ ОКНО (ТУЛТИП) --- */
     .sidebar-tooltip {
       position: absolute;
-      left: 65px; /* Отодвигаем вправо от иконки */
-      white-space: nowrap; /* Запрещаем тексту переноситься на новую строку */
+      left: 65px;
+      white-space: nowrap;
       
-      /* Цвет темнее основного окна (#3b124d) */
       background-color: #22052e; 
       border: 1px solid #420d59;
       color: #ffffff;
@@ -150,16 +147,14 @@
       letter-spacing: 0.5px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       
-      /* Изначально скрываем окно подсказки */
       opacity: 0;
       visibility: hidden;
-      transform: translateX(-10px); /* Легкое смещение для эффекта "выплывания" */
+      transform: translateX(-10px);
       
       transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-      z-index: 10; /* Отображается поверх контента справа */
+      z-index: 10;
     }
 
-    /* Маленький стрелочка-указатель (уголок) у всплывающего окна */
     .sidebar-tooltip::before {
       content: '';
       position: absolute;
@@ -173,7 +168,6 @@
       border-bottom: 1px solid #420d59;
     }
 
-    /* Показываем окно с названием при наведении на элемент сайдбара */
     .sidebar-item-wrapper:hover .sidebar-tooltip {
       opacity: 1;
       visibility: visible;
@@ -206,16 +200,29 @@
       transform: translateY(0);
     }
 
-    .content-wrapper h1 {
-      margin-top: 0;
-      font-size: 40px;
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-    
-    .content-wrapper p {
+    /* Стилизация вывода псевдо-консоли */
+    .console-log {
+      margin: 0 0 12px 0;
       font-size: 18px;
+      line-height: 24px;
       color: #e2c7f5;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Класс, который делает строчку лога видимой через JS */
+    .console-log.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Акцент на системные теги консоли */
+    .console-log .status-ok {
+      color: #00b06f;
+    }
+    .console-log .status-warn {
+      color: #ffaa00;
     }
   </style>
 </head>
@@ -223,10 +230,13 @@
 
   <div class="main-container" id="mainContainer">
     
+    <!-- Кнопка открытия -->
     <p class="click-to-open">Click to open</p>
 
+    <!-- Внутреннее устройство сайта -->
     <div class="content-layout">
       
+      <!-- ЛЕВАЯ ПАНЕЛЬ -->
       <aside class="sidebar">
         
         <div class="sidebar-item-wrapper">
@@ -243,9 +253,9 @@
 
       </aside>
 
-      <main class="content-wrapper">
-        <h1>Hi</h1>
-        <p>This is my test site on GitHub Pages.</p>
+      <!-- ПРАВАЯ ЧАСТЬ (ТЕКСТ УБРАН) -->
+      <main class="content-wrapper" id="consoleOutput">
+        <!-- Сюда скрипт будет последовательно выводить строки загрузки -->
       </main>
 
     </div>
@@ -254,12 +264,71 @@
 
   <script>
     const container = document.getElementById('mainContainer');
+    const consoleOutput = document.getElementById('consoleOutput');
+
+    // Массив строк, которые будут имитировать загрузку консоли
+    const logLines = [
+      'Connecting to Meossy secure server... <span class="status-ok">SUCCESS</span>',
+      'Fetching repository metadata... Done',
+      'Loading interface components... <span class="status-ok">OK</span>',
+      'Decrypting user profile info... <span class="status-warn">98%</span>',
+      'System initialization completed.'
+    ];
 
     container.addEventListener('click', function(e) {
       if (!container.classList.contains('expanded')) {
         container.classList.add('expanded');
+        
+        // Запускаем процесс логирования ровно через 1000мс после клика 
+        // (когда анимация раскрытия окна гарантированно завершится)
+        setTimeout(startConsoleLoading, 1000);
       }
     });
+
+    function startConsoleLoading() {
+      let currentLine = 0;
+
+      function printNextLine() {
+        if (currentLine < logLines.length) {
+          // Создаем новый элемент абзаца для строки лога
+          const p = document.createElement('p');
+          p.className = 'console-log';
+          p.innerHTML = `> ${logLines[currentLine]}`;
+          consoleOutput.appendChild(p);
+
+          // Делаем микро-задержку для анимации появления строки через CSS
+          setTimeout(() => {
+            p.classList.add('visible');
+          }, 50);
+
+          currentLine++;
+          // Интервал между появлением новых строчек логов (500 миллисекунд)
+          setTimeout(printNextLine, 500);
+        } else {
+          // Когда все строки напечатаны, ждем 1.5 секунды и очищаем экран
+          setTimeout(clearConsole, 1500);
+        }
+      }
+
+      printNextLine();
+    }
+
+    function clearConsole() {
+      const elements = consoleOutput.querySelectorAll('.console-log');
+      
+      // Плавно скрываем все элементы консоли назад
+      elements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-5px)';
+        el.style.transition = 'all 0.4s ease';
+      });
+
+      // Полностью удаляем их из HTML структуры после завершения анимации исчезновения
+      setTimeout(() => {
+        consoleOutput.innerHTML = '';
+        // Логи исчезли. Окно готово для вставки будущей финальной информации!
+      }, 400);
+    }
   </script>
 </body>
 </html>
