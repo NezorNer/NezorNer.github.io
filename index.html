@@ -279,6 +279,36 @@
       margin-top: 15px; 
     }
 
+    /* Контент внутри приветственного окна (центрирование) */
+    .welcome-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+
+    #welcomeText {
+      margin: 0;
+      font-size: 20px; /* Чуть крупнее основного, но аккуратный */
+      color: #ffffff;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Анимация мигания каретки (_) */
+    .cursor {
+      color: #b58ecb;
+      margin-left: 3px;
+      animation: blink-cursor 0.8s step-end infinite;
+    }
+
+    @keyframes blink-cursor {
+      from, to { color: transparent }
+      50% { color: #b58ecb; }
+    }
+
     /* Секция под приветственным окном */
     .bottom-section {
       display: flex;
@@ -289,7 +319,7 @@
       margin-bottom: 5px;
     }
 
-    /* ЛЕВОЕ ПРОСТРАНСТВО (Добавлена сетка и рамка для заполнения пустоты) */
+    /* Левое визор-пространство для анкеты */
     .left-spacer {
       flex: 4.5; 
       display: flex;
@@ -300,19 +330,16 @@
       padding: 20px;
       position: relative;
       
-      /* Мягкая фоновая Sci-Fi сетка */
       background-image: 
         linear-gradient(rgba(93, 31, 122, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(93, 31, 122, 0.04) 1px, transparent 1px);
       background-size: 20px 20px;
       background-position: center;
       
-      /* Тонкий технологический контур вокруг всей левой зоны */
       border: 1px dashed rgba(93, 31, 122, 0.25);
       border-radius: 16px;
     }
 
-    /* Декоративные угловые маркеры (прицелы) */
     .left-spacer::before, .left-spacer::after {
       content: '';
       position: absolute;
@@ -320,7 +347,6 @@
       height: 12px;
       opacity: 0.5;
     }
-    /* Верхний левый и нижний правый уголки */
     .left-spacer::before {
       top: 10px; left: 10px;
       border-top: 2px solid #5d1f7a;
@@ -332,26 +358,24 @@
       border-right: 2px solid #5d1f7a;
     }
 
-    /* Стилизация красивого анкетного блока */
+    /* Стилизация анкетного блока */
     .profile-form {
       display: flex;
       flex-direction: column;
-      gap: 25px;                  
-      font-size: 45px;            
+      gap: 10px;                  
+      font-size: 15px;            
       letter-spacing: 0.7px;
       width: 100%;
-      max-width: 820px; 
+      max-width: 320px; 
       
-      background: rgba(35, 5, 48, 0.75); /* Плотный темный фон карточки */
+      background: rgba(35, 5, 48, 0.75); 
       border: 1px solid rgba(93, 31, 122, 0.6);
       padding: 20px 22px;
       border-radius: 12px;
       box-sizing: border-box;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      position: relative;
     }
 
-    /* Маленькие технические подписи сверху и снизу карточки для веса */
     .form-header-tag {
       font-size: 9px;
       color: #5d1f7a;
@@ -394,6 +418,7 @@
 
     <div class="content-layout">
       
+      <!-- ЛЕВАЯ ПАНЕЛЬ -->
       <aside class="sidebar">
         <div class="sidebar-item-wrapper">
           <div class="home-button">
@@ -405,39 +430,52 @@
         </div>
       </aside>
 
+      <!-- ПРАВАЯ ЧАСТЬ -->
       <main class="content-wrapper">
         
+        <!-- Блок вывода консоли -->
         <div id="consoleOutput"></div>
 
+        <!-- Блок нового интерфейса -->
         <div id="finalInterface" class="final-interface">
           
+          <!-- Верхнее окно приветствия -->
           <div class="welcome-box sub-window">
             <div class="window-header">
-              <span class="window-title">sys // welcome.txt</span>
+              <span class="window-title">sys // welcome.sh</span>
               <div class="window-dots"><span></span><span></span><span></span></div>
+            </div>
+            <!-- Блок для центрирования печатного текста -->
+            <div class="welcome-content">
+              <p id="welcomeText"></p>
             </div>
           </div>
           
+          <!-- Нижняя зона разметки -->
           <div class="bottom-section">
             
+            <!-- Левое визор-пространство с Анкетой -->
             <div class="left-spacer">
               
               <div class="profile-form">
                 <div class="form-header-tag">[ ID card // no. 77-A ]</div>
                 
-                <p><span class="form-label">Nickname:</span> <span class="form-value">Meossy</span></p>
-                <p><span class="form-label">Gender:</span> <span class="form-value">Gay</span></p>
-                <p><span class="form-label">Age:</span> <span class="form-value">18</span></p>
-                <p><span class="form-label">Location:</span> <span class="form-value">Russia</span></p>
+                <p><span class="form-label">Nickname:</span> <span class="form-value">your_name</span></p>
+                <p><span class="form-label">Gender:</span> <span class="form-value">your_gender</span></p>
+                <p><span class="form-label">Age:</span> <span class="form-value">your_age</span></p>
+                <p><span class="form-label">Location:</span> <span class="form-value">your_city</span></p>
                 <p><span class="form-label">Languages:</span> <span class="form-value">ru / en</span></p>
-                <p><span class="form-label">Hobby:</span> <span class="form-value">Drawing</span></p>
-                <p><span class="form-label">About:</span> <span class="form-value">I'm a femboy</span></p>
+                <p><span class="form-label">Status:</span> <span class="form-value">online</span></p>
+                <p><span class="form-label">Hobby:</span> <span class="form-value">coding</span></p>
+                <p><span class="form-label">Skills:</span> <span class="form-value">html / css / js</span></p>
+                <p><span class="form-label">About:</span> <span class="form-value">hello world...</span></p>
                 
                 <div class="form-footer-tag">[ STATUS: SECURE LOCAL NODE ]</div>
               </div>
               
             </div> 
 
+            <!-- Правое окно -->
             <div class="right-box sub-window">
               <div class="window-header">
                 <span class="window-title">sys // main_logs</span>
@@ -545,9 +583,35 @@
         
         setTimeout(() => {
           finalInterface.classList.add('visible');
+          // Запускаем печать приветствия после появления интерфейса
+          setTimeout(typeWelcomeText, 600);
         }, 50);
         
       }, 400);
+    }
+
+    // Скрипт посимвольной печати приветствия
+    function typeWelcomeText() {
+      const target = document.getElementById('welcomeText');
+      const textToType = "Hello everyone";
+      let index = 0;
+
+      // Создаем элемент мигающего курсора
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      cursor.innerText = '_';
+
+      function type() {
+        if (index < textToType.length) {
+          target.textContent = textToType.substring(0, index + 1);
+          target.appendChild(cursor);
+          index++;
+          setTimeout(type, 120); // Скорость печати букв
+        }
+      }
+
+      target.appendChild(cursor); // Изначально показываем просто курсор перед печатью
+      setTimeout(type, 200);
     }
   </script>
 </body>
