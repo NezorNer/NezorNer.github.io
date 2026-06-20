@@ -414,6 +414,145 @@
     .right-box {
       flex: 5.5; 
     }
+
+    /* --- КОНТЕЙНЕР СТРАНИЦ ДЛЯ ПРАВОГО ОКНА --- */
+    .pages-container {
+      flex: 1;
+      position: relative;
+      padding: 20px;
+      overflow-hidden;
+      min-height: 0;
+    }
+
+    /* Базовый стиль страниц */
+    .page {
+      display: none;
+      height: 100%;
+      flex-direction: column;
+      transform-origin: center;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    /* Заголовки внутренних страниц */
+    .page-header-title {
+      margin: 0 0 10px 0;
+      font-size: 26px;
+      color: #ffffff;
+      letter-spacing: 1px;
+      border-bottom: 1px dashed rgba(93, 31, 122, 0.5);
+      padding-bottom: 6px;
+    }
+
+    /* Слот под будущий контент страниц (текст, картинки) */
+    .page-content-slot {
+      flex: 1;
+      color: #e2c7f5;
+      font-size: 16px;
+      line-height: 20px;
+      overflow-y: auto; /* Скролл, если контента в будущем будет много */
+      padding-right: 5px;
+    }
+
+    /* --- ПАНЕЛЬ НАВИГАЦИИ (КНОПКИ СНИЗУ) --- */
+    .page-navigation {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 15px;
+      background-color: rgba(35, 5, 48, 0.4);
+      border-top: 1px solid rgba(93, 31, 122, 0.4);
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+
+    /* Квадратные аккуратные кнопки */
+    .nav-square-btn {
+      width: 38px;
+      height: 38px;
+      background-color: #3b124d;
+      border: 2px solid #5d1f7a;
+      border-radius: 8px;
+      color: #e2c7f5;
+      font-family: 'Terminus', sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      /* Плавный переход для ховера */
+      transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
+                  background-color 0.2s ease, 
+                  border-color 0.2s ease, 
+                  box-shadow 0.2s ease;
+    }
+
+    /* Эффект наведения курсора — кнопка увеличивается совсем немного */
+    .nav-square-btn:hover {
+      transform: scale(1.05);
+      background-color: #4f1b66;
+      border-color: #b58ecb;
+      color: #ffffff;
+    }
+
+    /* Активное состояние кнопки */
+    .nav-square-btn.active {
+      background-color: #6a248a;
+      border-color: #b58ecb;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(181, 142, 203, 0.4);
+    }
+
+    /* --- АНИМАЦИИ ВЫКЛЮЧЕНИЯ/ВКЛЮЧЕНИЯ ТЕЛЕВИЗОРА (CRT EFFECT) --- */
+    .page.crt-off {
+      display: flex; 
+      animation: crtCollapse 0.35s ease-in forwards;
+    }
+
+    .page.crt-on {
+      display: flex;
+      animation: crtExpand 0.35s ease-out forwards;
+    }
+
+    @keyframes crtCollapse {
+      0% {
+        transform: scaleX(1) scaleY(1);
+        opacity: 1;
+        filter: brightness(1);
+      }
+      40% {
+        transform: scaleX(1) scaleY(0.02);
+        opacity: 0.8;
+        filter: brightness(2);
+      }
+      100% {
+        transform: scaleX(0) scaleY(0);
+        opacity: 0;
+        filter: brightness(4);
+      }
+    }
+
+    @keyframes crtExpand {
+      0% {
+        transform: scaleX(0) scaleY(0);
+        opacity: 0;
+        filter: brightness(4);
+      }
+      50% {
+        transform: scaleX(1) scaleY(0.02);
+        opacity: 0.8;
+        filter: brightness(2);
+      }
+      100% {
+        transform: scaleX(1) scaleY(1);
+        opacity: 1;
+        filter: brightness(1);
+      }
+    }
   </style>
 </head>
 <body>
@@ -476,6 +615,39 @@
                 <span class="window-title">sys // main_logs</span>
                 <div class="window-dots"><span></span><span></span><span></span></div>
               </div>
+
+              <div class="pages-container">
+                
+                <div class="page active" data-page="1">
+                  <div class="page-header-title">My devices</div>
+                  <div class="page-content-slot">
+                    <p>> PC: Ryzen 5 / RTX 4060 Ti</p>
+                    <p>> Phone: iPhone 13 Pro</p>
+                    </div>
+                </div>
+
+                <div class="page" data-page="2">
+                  <div class="page-header-title">My fav music</div>
+                  <div class="page-content-slot">
+                    <p>> Phonk / Witch House / Synthwave</p>
+                  </div>
+                </div>
+
+                <div class="page" data-page="3">
+                  <div class="page-header-title">My fav games</div>
+                  <div class="page-content-slot">
+                    <p>> Cyberpunk 2077 / Minecraft / OSU!</p>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="page-navigation">
+                <button class="nav-square-btn active" data-target="1">1</button>
+                <button class="nav-square-btn" data-target="2">2</button>
+                <button class="nav-square-btn" data-target="3">3</button>
+              </div>
+
             </div>   
           </div>
 
@@ -591,7 +763,7 @@
     // Скрипт посимвольной печати приветствия
     function typeWelcomeText() {
       const target = document.getElementById('welcomeText');
-      const textToType = "Hello everyone";
+      const textToType = "Welcome";
       let index = 0;
 
       const cursor = document.createElement('span');
@@ -640,28 +812,23 @@
 
     // Анимационный цикл сглаживания физики движения
     function updatePhysics() {
-      // Алгоритм Lerp: текущая координата стремится к целевой с коэффициентом замедления (0.12)
       currentX += (targetX - currentX) * 0.12;
       currentY += (targetY - currentY) * 0.12;
 
       profileForm.style.left = currentX + 'px';
       profileForm.style.top = currentY + 'px';
 
-      // Если разница еще ощутима или продолжается таскание — продолжаем цикл анимации
       if (isDragging || Math.abs(targetX - currentX) > 0.1 || Math.abs(targetY - currentY) > 0.1) {
         animationFrameId = requestAnimationFrame(updatePhysics);
       } else {
-        // Окончательное выравнивание для предотвращения микро-сдвигов
         profileForm.style.left = targetX + 'px';
         profileForm.style.top = targetY + 'px';
         animationFrameId = null;
       }
     }
 
-    // Начало движения
     function dragStart(e) {
       isDragging = true;
-      
       if (e.type === "touchstart") {
         dragStartX = e.touches[0].clientX;
         dragStartY = e.touches[0].clientY;
@@ -669,17 +836,14 @@
         dragStartX = e.clientX;
         dragStartY = e.clientY;
       }
-
       formStartX = targetX;
       formStartY = targetY;
 
-      // Если цикл физики не запущен — запускаем его
       if (!animationFrameId) {
         animationFrameId = requestAnimationFrame(updatePhysics);
       }
     }
 
-    // Процесс движения (вычисление новой целевой точки с проверкой стенок)
     function drag(e) {
       if (!isDragging) return;
       e.preventDefault(); 
@@ -695,7 +859,6 @@
 
       let deltaX = clientX - dragStartX;
       let deltaY = clientY - dragStartY;
-
       let newLeft = formStartX + deltaX;
       let newTop = formStartY + deltaY;
 
@@ -704,25 +867,19 @@
       const formWidth = profileForm.offsetWidth;
       const formHeight = profileForm.offsetHeight;
 
-      // Проверка левой и правой границ
       if (newLeft < 0) newLeft = 0;
       if (newLeft > spacerWidth - formWidth) newLeft = spacerWidth - formWidth;
-
-      // Проверка верхней и нижней границ
       if (newTop < 0) newTop = 0;
       if (newTop > spacerHeight - formHeight) newTop = spacerHeight - formHeight;
 
-      // Передаем новые данные как цель для плавного преследования
       targetX = newLeft;
       targetY = newTop;
     }
 
-    // Конец движения
     function dragEnd() {
       isDragging = false;
     }
 
-    // Слушатели событий мыши и тачскрина
     profileForm.addEventListener('mousedown', dragStart);
     document.addEventListener('mousemove', drag);
     document.addEventListener('mouseup', dragEnd);
@@ -731,7 +888,6 @@
     document.addEventListener('touchmove', drag, { passive: false });
     document.addEventListener('touchend', dragEnd);
 
-    // Корректировка границ при ресайзе экрана (с плавным перетеканием на новое место)
     window.addEventListener('resize', () => {
       if (finalInterface.classList.contains('visible')) {
         const spacerWidth = leftSpacer.clientWidth;
@@ -746,6 +902,42 @@
           animationFrameId = requestAnimationFrame(updatePhysics);
         }
       }
+    });
+
+    /* --- ЛОГИКА CRT-ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ --- */
+    const navButtons = document.querySelectorAll('.nav-square-btn');
+    let isTransitioning = false;
+
+    navButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Защита от спама кликами во время анимации или повторного клика на активный таб
+        if (isTransitioning || button.classList.contains('active')) return;
+        
+        isTransitioning = true;
+        const targetPageId = button.getAttribute('data-target');
+        const currentPage = document.querySelector('.page.active');
+        const nextPage = document.querySelector(`.page[data-page="${targetPageId}"]`);
+        
+        // Меняем активную кнопку управления
+        document.querySelector('.nav-square-btn.active').classList.remove('active');
+        button.classList.add('active');
+        
+        // 1 ЭТАП: Схлопываем текущую страницу (ТВ выключается)
+        currentPage.classList.add('crt-off');
+        
+        setTimeout(() => {
+          currentPage.classList.remove('active', 'crt-off');
+          
+          // 2 ЭТАП: Разворачиваем следующую страницу (ТВ включается)
+          nextPage.classList.add('active', 'crt-on');
+          
+          setTimeout(() => {
+            nextPage.classList.remove('crt-on');
+            isTransitioning = false; // Освобождаем триггер переключения
+          }, 350); // Время совпадает с длительностью crtExpand в CSS
+          
+        }, 350); // Время совпадает с длительностью crtCollapse в CSS
+      });
     });
   </script>
 </body>
