@@ -339,7 +339,7 @@
       
       border: 1px dashed rgba(93, 31, 122, 0.25);
       border-radius: 16px;
-      overflow: hidden; /* Чтобы анкета визуально не вылезала за скругления границ */
+      overflow: hidden; 
     }
 
     .left-spacer::before, .left-spacer::after {
@@ -348,7 +348,7 @@
       width: 12px;
       height: 12px;
       opacity: 0.5;
-      pointer-events: none; /* Чтобы маркеры не мешали перетаскиванию */
+      pointer-events: none; 
     }
     .left-spacer::before {
       top: 10px; left: 10px;
@@ -378,9 +378,8 @@
       box-sizing: border-box;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 
-      /* Абсолютное позиционирование для возможности перемещения */
       position: absolute;
-      cursor: move; /* Иконка руки-крестика при наведении */
+      cursor: default; /* Обычный стандартный курсор мыши */
     }
 
     .form-header-tag {
@@ -579,7 +578,6 @@
         consoleOutput.style.display = 'none';
         finalInterface.style.display = 'flex';
         
-        // Инициализируем центр анкеты сразу после активации flex-контейнера
         centerProfileForm();
         
         setTimeout(() => {
@@ -613,12 +611,15 @@
       setTimeout(type, 200);
     }
 
-    /* --- ЛОГИКА ДИНАМИЧЕСКОГО ПЕРЕТАСКИВАНИЯ (DRAG & DROP) --- */
+    /* --- ЛОГИКА СГЛАЖЕННОГО ПЕРЕТАСКИВАНИЯ (LERP DRAG & DROP) --- */
     let isDragging = false;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let formStartX = 0;
-    let formStartY = 0;
+    let dragStartX = 0, dragStartY = 0;
+    let formStartX = 0, formStartY = 0;
+
+    // Физические координаты положения анкеты
+    let currentX = 0, currentY = 0;   // Где блок находится сейчас
+    let targetX = 0, targetY = 0;     // Куда блок должен прилететь
+    let animationFrameId = null;
 
     // Функция авто-центрирования анкеты в левом поле
     function centerProfileForm() {
@@ -627,11 +628,34 @@
       const formWidth = profileForm.offsetWidth;
       const formHeight = profileForm.offsetHeight;
 
-      const initialLeft = (spacerWidth - formWidth) / 2;
-      const initialTop = (spacerHeight - formHeight) / 2;
+      const initialLeft = Math.max(0, (spacerWidth - formWidth) / 2);
+      const initialTop = Math.max(0, (spacerHeight - formHeight) / 2);
 
-      profileForm.style.left = Math.max(0, initialLeft) + 'px';
-      profileForm.style.top = Math.max(0, initialTop) + 'px';
+      currentX = targetX = initialLeft;
+      currentY = targetY = initialTop;
+
+      profileForm.style.left = currentX + 'px';
+      profileForm.style.top = currentY + 'px';
+    }
+
+    // Анимационный цикл сглаживания физики движения
+    function updatePhysics() {
+      // Алгоритм Lerp: текущая координата стремится к целевой с коэффициентом замедления (0.12)
+      currentX += (targetX - currentX) * 0.12;
+      currentY += (targetY - currentY) * 0.12;
+
+      profileForm.style.left = currentX + 'px';
+      profileForm.style.top = currentY + 'px';
+
+      // Если разница еще ощутима или продолжается таскание — продолжаем цикл анимации
+      if (isDragging || Math.abs(targetX - currentX) > 0.1 || Math.abs(targetY - currentY) > 0.1) {
+        animationFrameId = requestAnimationFrame(updatePhysics);
+      } else {
+        // Окончательное выравнивание для предотвращения микро-сдвигов
+        profileForm.style.left = targetX + 'px';
+        profileForm.style.top = targetY + 'px';
+        animationFrameId = null;
+      }
     }
 
     // Начало движения
@@ -646,14 +670,19 @@
         dragStartY = e.clientY;
       }
 
-      formStartX = parseInt(profileForm.style.left) || 0;
-      formStartY = parseInt(profileForm.style.top) || 0;
+      formStartX = targetX;
+      formStartY = targetY;
+
+      // Если цикл физики не запущен — запускаем его
+      if (!animationFrameId) {
+        animationFrameId = requestAnimationFrame(updatePhysics);
+      }
     }
 
-    // Процесс движения с жесткими лимитами стенок
+    // Процесс движения (вычисление новой целевой точки с проверкой стенок)
     function drag(e) {
       if (!isDragging) return;
-      e.preventDefault(); // Защита от системных скроллов на телефонах
+      e.preventDefault(); 
 
       let clientX, clientY;
       if (e.type === "touchmove") {
@@ -670,22 +699,22 @@
       let newLeft = formStartX + deltaX;
       let newTop = formStartY + deltaY;
 
-      // Текущие динамические размеры контейнеров
       const spacerWidth = leftSpacer.clientWidth;
       const spacerHeight = leftSpacer.clientHeight;
       const formWidth = profileForm.offsetWidth;
       const formHeight = profileForm.offsetHeight;
 
-      // Ограничение по оси X (Лево / Право)
+      // Проверка левой и правой границ
       if (newLeft < 0) newLeft = 0;
       if (newLeft > spacerWidth - formWidth) newLeft = spacerWidth - formWidth;
 
-      // Ограничение по оси Y (Верх / Низ)
+      // Проверка верхней и нижней границ
       if (newTop < 0) newTop = 0;
       if (newTop > spacerHeight - formHeight) newTop = spacerHeight - formHeight;
 
-      profileForm.style.left = newLeft + 'px';
-      profileForm.style.top = newTop + 'px';
+      // Передаем новые данные как цель для плавного преследования
+      targetX = newLeft;
+      targetY = newTop;
     }
 
     // Конец движения
@@ -702,22 +731,20 @@
     document.addEventListener('touchmove', drag, { passive: false });
     document.addEventListener('touchend', dragEnd);
 
-    // Корректировка границ при изменении размеров экрана
+    // Корректировка границ при ресайзе экрана (с плавным перетеканием на новое место)
     window.addEventListener('resize', () => {
       if (finalInterface.classList.contains('visible')) {
-        let currentLeft = parseInt(profileForm.style.left) || 0;
-        let currentTop = parseInt(profileForm.style.top) || 0;
-
         const spacerWidth = leftSpacer.clientWidth;
         const spacerHeight = leftSpacer.clientHeight;
         const formWidth = profileForm.offsetWidth;
         const formHeight = profileForm.offsetHeight;
 
-        if (currentLeft > spacerWidth - formWidth) currentLeft = Math.max(0, spacerWidth - formWidth);
-        if (currentTop > spacerHeight - formHeight) currentTop = Math.max(0, spacerHeight - formHeight);
+        if (targetX > spacerWidth - formWidth) targetX = Math.max(0, spacerWidth - formWidth);
+        if (targetY > spacerHeight - formHeight) targetY = Math.max(0, spacerHeight - formHeight);
 
-        profileForm.style.left = currentLeft + 'px';
-        profileForm.style.top = currentTop + 'px';
+        if (!animationFrameId) {
+          animationFrameId = requestAnimationFrame(updatePhysics);
+        }
       }
     });
   </script>
