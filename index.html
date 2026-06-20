@@ -436,7 +436,7 @@
       display: flex;
     }
 
-    /* Заголовки внутренних страниц (Перемещен в середину, пунктир убран) */
+    /* Заголовки внутренних страниц */
     .page-header-title {
       margin: 0 0 15px 0;
       font-size: 26px;
@@ -445,7 +445,7 @@
       text-align: center;
     }
 
-    /* Слот под будущий контент страниц (текст, картинки) */
+    /* Слот под будущий контент страниц */
     .page-content-slot {
       flex: 1;
       color: #e2c7f5;
@@ -455,24 +455,22 @@
       padding-right: 5px;
     }
 
-    /* --- ПАНЕЛЬ НАВИГАЦИИ (КНОПКИ СНИЗУ) --- */
+    /* --- ПАНЕЛЬ НАВИГАЦИИ --- */
     .page-navigation {
       display: flex;
       justify-content: center;
       gap: 15px;
       padding: 15px;
-      background-color: rgba(35, 5, 48, 0.4);
-      border-top: 1px solid rgba(93, 31, 122, 0.4);
       border-bottom-left-radius: 16px;
       border-bottom-right-radius: 16px;
     }
 
-    /* Квадратные аккуратные кнопки */
+    /* Аккуратные кнопки */
     .nav-square-btn {
       width: 38px;
       height: 38px;
       background-color: #3b124d;
-      border: 2px solid #5d1f7a;
+      border: none;
       border-radius: 8px;
       color: #e2c7f5;
       font-family: 'Terminus', sans-serif;
@@ -482,73 +480,63 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      outline: none;
       
       transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
                   background-color 0.2s ease, 
-                  border-color 0.2s ease, 
-                  box-shadow 0.2s ease;
+                  box-shadow 0.2s ease,
+                  color 0.2s ease;
     }
 
-    /* Эффект наведения курсора — кнопка увеличивается совсем немного */
+    /* Эффект наведения курсора */
     .nav-square-btn:hover {
       transform: scale(1.05);
       background-color: #4f1b66;
-      border-color: #b58ecb;
       color: #ffffff;
+      box-shadow: 0 0 15px rgba(181, 142, 203, 0.5);
     }
 
     /* Активное состояние кнопки */
     .nav-square-btn.active {
       background-color: #6a248a;
-      border-color: #b58ecb;
       color: #ffffff;
-      box-shadow: 0 0 10px rgba(181, 142, 203, 0.4);
+      box-shadow: 0 0 15px rgba(181, 142, 203, 0.7);
     }
 
-    /* --- АНИМАЦИИ ВЫКЛЮЧЕНИЯ/ВКЛЮЧЕНИЯ ТЕЛЕВИЗОРА ВЕРТИКАЛЬНО (CRT EFFECT) --- */
+    /* --- ПОМЕНЯЛ МЕСТАМИ EASE-IN И EASE-OUT --- */
     .page.crt-off {
       display: flex; 
-      animation: crtCollapse 0.35s ease-in forwards;
+      animation: crtCollapse 0.3s ease-out forwards; /* Закрытие: теперь плавное замедление в конце */
     }
 
     .page.crt-on {
       display: flex;
-      animation: crtExpand 0.35s ease-out forwards;
+      animation: crtExpand 0.3s ease-in forwards;   /* Открытие: теперь плавное ускорение в конце */
     }
 
-    /* Схлопывание по горизонтали в вертикальную полосу */
+    /* Схлопывание по бокам до конца в 0 */
     @keyframes crtCollapse {
       0% {
-        transform: scaleX(1) scaleY(1);
+        transform: scaleX(1);
         opacity: 1;
         filter: brightness(1);
       }
-      40% {
-        transform: scaleX(0.02) scaleY(1);
-        opacity: 0.8;
-        filter: brightness(2);
-      }
       100% {
-        transform: scaleX(0) scaleY(0);
+        transform: scaleX(0);
         opacity: 0;
-        filter: brightness(4);
+        filter: brightness(1.8);
       }
     }
 
-    /* Разворачивание из вертикальной полосы */
+    /* Разворачивание из центра в бока */
     @keyframes crtExpand {
       0% {
-        transform: scaleX(0) scaleY(0);
+        transform: scaleX(0);
         opacity: 0;
-        filter: brightness(4);
-      }
-      50% {
-        transform: scaleX(0.02) scaleY(1);
-        opacity: 0.8;
-        filter: brightness(2);
+        filter: brightness(1.8);
       }
       100% {
-        transform: scaleX(1) scaleY(1);
+        transform: scaleX(1);
         opacity: 1;
         filter: brightness(1);
       }
@@ -563,7 +551,6 @@
 
     <div class="content-layout">
       
-      <!-- ЛЕВАЯ ПАНЕЛЬ -->
       <aside class="sidebar">
         <div class="sidebar-item-wrapper">
           <div class="home-button">
@@ -575,14 +562,12 @@
         </div>
       </aside>
 
-      <!-- ПРАВАЯ ЧАСТЬ -->
       <main class="content-wrapper">
         
         <div id="consoleOutput"></div>
 
         <div id="finalInterface" class="final-interface">
           
-          <!-- Верхнее окно приветствия -->
           <div class="welcome-box sub-window">
             <div class="window-header">
               <span class="window-title">sys // welcome.txt</span>
@@ -593,10 +578,8 @@
             </div>
           </div>
           
-          <!-- Нижняя зона разметки -->
           <div class="bottom-section">
             
-            <!-- Левое визор-пространство с Анкетой -->
             <div class="left-spacer" id="leftSpacer">
               
               <div class="profile-form" id="profileForm">
@@ -615,17 +598,14 @@
               
             </div> 
 
-            <!-- Правое окно с табами -->
             <div class="right-box sub-window">
               <div class="window-header">
                 <span class="window-title">sys // main_logs</span>
                 <div class="window-dots"><span></span><span></span><span></span></div>
               </div>
 
-              <!-- Контейнер страниц -->
               <div class="pages-container">
                 
-                <!-- Страница 1 -->
                 <div class="page active" data-page="1">
                   <div class="page-header-title">My devices</div>
                   <div class="page-content-slot">
@@ -634,7 +614,6 @@
                   </div>
                 </div>
 
-                <!-- Страница 2 -->
                 <div class="page" data-page="2">
                   <div class="page-header-title">My fav music</div>
                   <div class="page-content-slot">
@@ -642,7 +621,6 @@
                   </div>
                 </div>
 
-                <!-- Страница 3 -->
                 <div class="page" data-page="3">
                   <div class="page-header-title">My fav games</div>
                   <div class="page-content-slot">
@@ -652,7 +630,6 @@
 
               </div>
 
-              <!-- Панель навигации -->
               <div class="page-navigation">
                 <button class="nav-square-btn active" data-target="1">1</button>
                 <button class="nav-square-btn" data-target="2">2</button>
@@ -927,21 +904,21 @@
         document.querySelector('.nav-square-btn.active').classList.remove('active');
         button.classList.add('active');
         
-        // Схлопываем текущую страницу в вертикальную линию
+        // Схлопываем текущую страницу по горизонтали
         currentPage.classList.add('crt-off');
         
         setTimeout(() => {
           currentPage.classList.remove('active', 'crt-off');
           
-          // Разворачиваем следующую из вертикальной линии
+          // Разворачиваем следующую страницу по горизонтали
           nextPage.classList.add('active', 'crt-on');
           
           setTimeout(() => {
             nextPage.classList.remove('crt-on');
             isTransitioning = false; 
-          }, 350); 
+          }, 300); 
           
-        }, 350); 
+        }, 300); 
       });
     });
   </script>
