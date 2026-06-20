@@ -443,6 +443,7 @@
       color: #ffffff;
       letter-spacing: 1px;
       text-align: center;
+      min-height: 32px;
     }
 
     /* Слот под будущий контент страниц */
@@ -503,15 +504,10 @@
       box-shadow: 0 0 15px rgba(181, 142, 203, 0.7);
     }
 
-    /* --- АНИМАЦИИ ВЕРТИКАЛЬНОГО СХЛОПЫВАНИЯ --- */
+    /* --- АНИМАЦИЯ ВЕРТИКАЛЬНОГО СХЛОПЫВАНИЯ --- */
     .page.crt-off {
       display: flex; 
-      animation: crtCollapse 0.2s ease-out forwards; /* Изменять скорость (0.3s) тут */
-    }
-
-    .page.crt-on {
-      display: flex;
-      animation: crtExpand 0.2s ease-in forwards;   /* Изменять скорость (0.3s) тут */
+      animation: crtCollapse 0.2s ease-out forwards;
     }
 
     /* Схлопывание по бокам до конца в 0 */
@@ -525,20 +521,6 @@
         transform: scaleX(0);
         opacity: 0;
         filter: brightness(1.8);
-      }
-    }
-
-    /* Разворачивание из центра в бока */
-    @keyframes crtExpand {
-      0% {
-        transform: scaleX(0);
-        opacity: 0;
-        filter: brightness(1.8);
-      }
-      100% {
-        transform: scaleX(1);
-        opacity: 1;
-        filter: brightness(1);
       }
     }
   </style>
@@ -742,7 +724,12 @@
         
         setTimeout(() => {
           finalInterface.classList.add('visible');
-          setTimeout(typeWelcomeText, 600);
+          setTimeout(() => {
+            typeWelcomeText();
+            // Запускаем печать для первой (активной по умолчанию) страницы
+            const initialPage = document.querySelector('.page.active');
+            typePageContent(initialPage);
+          }, 600);
         }, 50);
         
       }, 400);
@@ -888,16 +875,99 @@
       }
     });
 
+    /* --- ЛОГИКА ТЕКСТОВОЙ ПЕЧАТИ СТРАНИЦ --- */
+    let currentTypeTimeout = null;
+
+    // Сохраняем исходный текст всех страниц при запуске скрипта
+    const pagesData = [];
+    document.querySelectorAll('.page').forEach(page => {
+      const header = page.querySelector('.page-header-title');
+      const slot = page.querySelector('.page-content-slot');
+      
+      pagesData.push({
+        element: page,
+        id: page.getAttribute('data-page'),
+        headerText: header.textContent.trim(),
+        // Сохраняем массив строк из тегов <p>
+        paragraphs: Array.from(slot.querySelectorAll('p')).map(p => p.innerHTML)
+      });
+      
+      // Очищаем контент до востребования
+      header.textContent = '';
+      slot.innerHTML = '';
+    });
+
+    function typePageContent(pageElement) {
+      // Сбрасываем предыдущие таймауты печати, если кликнули слишком быстро
+      if (currentTypeTimeout) clearTimeout(currentTypeTimeout);
+
+      const data = pagesData.find(d => d.element === pageElement);
+      if (!data) return;
+
+      const headerNode = pageElement.querySelector('.page-header-title');
+      const slotNode = pageElement.querySelector('.page-content-slot');
+
+      headerNode.textContent = '';
+      slotNode.innerHTML = '';
+
+      // Базовые тайминги
+      const HEADER_SPEED = 40; 
+      const CONTENT_SPEED = HEADER_SPEED / 1.5; // В 1.5 раза быстрее заголовка
+
+      let headerIdx = 0;
+      
+      function printHeader() {
+        if (headerIdx < data.headerText.length) {
+          headerNode.textContent += data.headerText[headerIdx];
+          headerIdx++;
+          currentTypeTimeout = setTimeout(printHeader, HEADER_SPEED);
+        } else {
+          // Заголовок напечатан, переходим к абзацам
+          printParagraph(0);
+        }
+      }
+
+      function printParagraph(pIdx) {
+        if (pIdx >= data.paragraphs.length) {
+          isTransitioning = false; // Разблокируем интерфейс в самом конце печати
+          return;
+        }
+
+        const pTag = document.createElement('p');
+        slotNode.appendChild(pTag);
+
+        let charIdx = 0;
+        const text = data.paragraphs[pIdx];
+
+        function printChar() {
+          if (charIdx < text.length) {
+            // Проверка на HTML сущности или теги (на всякий случай)
+            if (text[charIdx] === '<') {
+              let closeIdx = text.indexOf('>', charIdx);
+              pTag.innerHTML = text.substring(0, closeIdx + 1);
+              charIdx = closeIdx + 1;
+            } else {
+              pTag.innerHTML = text.substring(0, charIdx + 1);
+              charIdx++;
+            }
+            currentTypeTimeout = setTimeout(printChar, CONTENT_SPEED);
+          } else {
+            // Переходим к следующему абзацу
+            printParagraph(pIdx + 1);
+          }
+        }
+        printChar();
+      }
+
+      printHeader();
+    }
+
     /* --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ --- */
     const navButtons = document.querySelectorAll('.nav-square-btn');
     let isTransitioning = false;
 
-    // ========================================================
-    // НАСТРОЙКА ТАЙМИНГОВ (Изменяй здесь!)
-    // ========================================================
-    const ANIMATION_DURATION = 200; // Длительность самой CSS-анимации в миллисекундах (0.3 секунды)
-    const REST_DELAY = 200;         // Полсекунды "отдыха" в закрытом состоянии перед открытием (0.5 секунды)
-    // ========================================================
+    const ANIMATION_DURATION = 200; // Скорость схлопывания .crt-off в CSS
+    const REST_DELAY = 100;         // Пауза перед стартом появления новой страницы
 
     navButtons.forEach(button => {
       button.addEventListener('click', () => {
@@ -911,21 +981,17 @@
         document.querySelector('.nav-square-btn.active').classList.remove('active');
         button.classList.add('active');
         
-        // Схлопываем текущую страницу по горизонтали
+        // Схлопываем текущую страницу (убираем её старый контент)
         currentPage.classList.add('crt-off');
         
-        // Ждем пока страница полностью закроется (ANIMATION_DURATION) + выдерживаем паузу "отдыха" (REST_DELAY)
         setTimeout(() => {
           currentPage.classList.remove('active', 'crt-off');
           
-          // Разворачиваем следующую страницу по горизонтали
-          nextPage.classList.add('active', 'crt-on');
+          // Активируем следующую страницу без crt-on анимации
+          nextPage.classList.add('active');
           
-          // Ждем завершения анимации открытия, чтобы снять блокировку кликов
-          setTimeout(() => {
-            nextPage.classList.remove('crt-on');
-            isTransitioning = false; 
-          }, ANIMATION_DURATION); 
+          // Запускаем асинхронную печать текста (заголовок + ускоренный контент)
+          typePageContent(nextPage);
           
         }, ANIMATION_DURATION + REST_DELAY); 
       });
