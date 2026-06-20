@@ -379,7 +379,7 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 
       position: absolute;
-      cursor: default; /* Обычный стандартный курсор мыши */
+      cursor: default;
     }
 
     .form-header-tag {
@@ -420,7 +420,7 @@
       flex: 1;
       position: relative;
       padding: 20px;
-      overflow-hidden;
+      overflow: hidden;
       min-height: 0;
     }
 
@@ -436,14 +436,13 @@
       display: flex;
     }
 
-    /* Заголовки внутренних страниц */
+    /* Заголовки внутренних страниц (Перемещен в середину, пунктир убран) */
     .page-header-title {
-      margin: 0 0 10px 0;
+      margin: 0 0 15px 0;
       font-size: 26px;
       color: #ffffff;
       letter-spacing: 1px;
-      border-bottom: 1px dashed rgba(93, 31, 122, 0.5);
-      padding-bottom: 6px;
+      text-align: center;
     }
 
     /* Слот под будущий контент страниц (текст, картинки) */
@@ -452,7 +451,7 @@
       color: #e2c7f5;
       font-size: 16px;
       line-height: 20px;
-      overflow-y: auto; /* Скролл, если контента в будущем будет много */
+      overflow-y: auto; 
       padding-right: 5px;
     }
 
@@ -484,7 +483,6 @@
       align-items: center;
       justify-content: center;
       
-      /* Плавный переход для ховера */
       transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
                   background-color 0.2s ease, 
                   border-color 0.2s ease, 
@@ -507,7 +505,7 @@
       box-shadow: 0 0 10px rgba(181, 142, 203, 0.4);
     }
 
-    /* --- АНИМАЦИИ ВЫКЛЮЧЕНИЯ/ВКЛЮЧЕНИЯ ТЕЛЕВИЗОРА (CRT EFFECT) --- */
+    /* --- АНИМАЦИИ ВЫКЛЮЧЕНИЯ/ВКЛЮЧЕНИЯ ТЕЛЕВИЗОРА ВЕРТИКАЛЬНО (CRT EFFECT) --- */
     .page.crt-off {
       display: flex; 
       animation: crtCollapse 0.35s ease-in forwards;
@@ -518,6 +516,7 @@
       animation: crtExpand 0.35s ease-out forwards;
     }
 
+    /* Схлопывание по горизонтали в вертикальную полосу */
     @keyframes crtCollapse {
       0% {
         transform: scaleX(1) scaleY(1);
@@ -525,7 +524,7 @@
         filter: brightness(1);
       }
       40% {
-        transform: scaleX(1) scaleY(0.02);
+        transform: scaleX(0.02) scaleY(1);
         opacity: 0.8;
         filter: brightness(2);
       }
@@ -536,6 +535,7 @@
       }
     }
 
+    /* Разворачивание из вертикальной полосы */
     @keyframes crtExpand {
       0% {
         transform: scaleX(0) scaleY(0);
@@ -543,7 +543,7 @@
         filter: brightness(4);
       }
       50% {
-        transform: scaleX(1) scaleY(0.02);
+        transform: scaleX(0.02) scaleY(1);
         opacity: 0.8;
         filter: brightness(2);
       }
@@ -563,6 +563,7 @@
 
     <div class="content-layout">
       
+      <!-- ЛЕВАЯ ПАНЕЛЬ -->
       <aside class="sidebar">
         <div class="sidebar-item-wrapper">
           <div class="home-button">
@@ -574,12 +575,14 @@
         </div>
       </aside>
 
+      <!-- ПРАВАЯ ЧАСТЬ -->
       <main class="content-wrapper">
         
         <div id="consoleOutput"></div>
 
         <div id="finalInterface" class="final-interface">
           
+          <!-- Верхнее окно приветствия -->
           <div class="welcome-box sub-window">
             <div class="window-header">
               <span class="window-title">sys // welcome.txt</span>
@@ -590,8 +593,10 @@
             </div>
           </div>
           
+          <!-- Нижняя зона разметки -->
           <div class="bottom-section">
             
+            <!-- Левое визор-пространство с Анкетой -->
             <div class="left-spacer" id="leftSpacer">
               
               <div class="profile-form" id="profileForm">
@@ -610,22 +615,26 @@
               
             </div> 
 
+            <!-- Правое окно с табами -->
             <div class="right-box sub-window">
               <div class="window-header">
                 <span class="window-title">sys // main_logs</span>
                 <div class="window-dots"><span></span><span></span><span></span></div>
               </div>
 
+              <!-- Контейнер страниц -->
               <div class="pages-container">
                 
+                <!-- Страница 1 -->
                 <div class="page active" data-page="1">
                   <div class="page-header-title">My devices</div>
                   <div class="page-content-slot">
                     <p>> PC: Ryzen 5 / RTX 4060 Ti</p>
                     <p>> Phone: iPhone 13 Pro</p>
-                    </div>
+                  </div>
                 </div>
 
+                <!-- Страница 2 -->
                 <div class="page" data-page="2">
                   <div class="page-header-title">My fav music</div>
                   <div class="page-content-slot">
@@ -633,6 +642,7 @@
                   </div>
                 </div>
 
+                <!-- Страница 3 -->
                 <div class="page" data-page="3">
                   <div class="page-header-title">My fav games</div>
                   <div class="page-content-slot">
@@ -642,6 +652,7 @@
 
               </div>
 
+              <!-- Панель навигации -->
               <div class="page-navigation">
                 <button class="nav-square-btn active" data-target="1">1</button>
                 <button class="nav-square-btn" data-target="2">2</button>
@@ -760,7 +771,6 @@
       }, 400);
     }
 
-    // Скрипт посимвольной печати приветствия
     function typeWelcomeText() {
       const target = document.getElementById('welcomeText');
       const textToType = "Welcome";
@@ -788,12 +798,10 @@
     let dragStartX = 0, dragStartY = 0;
     let formStartX = 0, formStartY = 0;
 
-    // Физические координаты положения анкеты
-    let currentX = 0, currentY = 0;   // Где блок находится сейчас
-    let targetX = 0, targetY = 0;     // Куда блок должен прилететь
+    let currentX = 0, currentY = 0;   
+    let targetX = 0, targetY = 0;     
     let animationFrameId = null;
 
-    // Функция авто-центрирования анкеты в левом поле
     function centerProfileForm() {
       const spacerWidth = leftSpacer.clientWidth;
       const spacerHeight = leftSpacer.clientHeight;
@@ -810,7 +818,6 @@
       profileForm.style.top = currentY + 'px';
     }
 
-    // Анимационный цикл сглаживания физики движения
     function updatePhysics() {
       currentX += (targetX - currentX) * 0.12;
       currentY += (targetY - currentY) * 0.12;
@@ -904,13 +911,12 @@
       }
     });
 
-    /* --- ЛОГИКА CRT-ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ --- */
+    /* --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ --- */
     const navButtons = document.querySelectorAll('.nav-square-btn');
     let isTransitioning = false;
 
     navButtons.forEach(button => {
       button.addEventListener('click', () => {
-        // Защита от спама кликами во время анимации или повторного клика на активный таб
         if (isTransitioning || button.classList.contains('active')) return;
         
         isTransitioning = true;
@@ -918,25 +924,24 @@
         const currentPage = document.querySelector('.page.active');
         const nextPage = document.querySelector(`.page[data-page="${targetPageId}"]`);
         
-        // Меняем активную кнопку управления
         document.querySelector('.nav-square-btn.active').classList.remove('active');
         button.classList.add('active');
         
-        // 1 ЭТАП: Схлопываем текущую страницу (ТВ выключается)
+        // Схлопываем текущую страницу в вертикальную линию
         currentPage.classList.add('crt-off');
         
         setTimeout(() => {
           currentPage.classList.remove('active', 'crt-off');
           
-          // 2 ЭТАП: Разворачиваем следующую страницу (ТВ включается)
+          // Разворачиваем следующую из вертикальной линии
           nextPage.classList.add('active', 'crt-on');
           
           setTimeout(() => {
             nextPage.classList.remove('crt-on');
-            isTransitioning = false; // Освобождаем триггер переключения
-          }, 350); // Время совпадает с длительностью crtExpand в CSS
+            isTransitioning = false; 
+          }, 350); 
           
-        }, 350); // Время совпадает с длительностью crtCollapse в CSS
+        }, 350); 
       });
     });
   </script>
