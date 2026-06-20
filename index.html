@@ -641,6 +641,27 @@
     const leftSpacer = document.getElementById('leftSpacer');
     const profileForm = document.getElementById('profileForm');
 
+    // --- НАСТРОЙКА АУДИОПУЛА (AUDIO POOL) ---
+    const audioPool = [];
+    const poolSize = 10; 
+    for (let i = 0; i < poolSize; i++) {
+      audioPool.push(new Audio('click.mp3'));
+    }
+    let currentAudioIndex = 0;
+
+    function playClickSound() {
+      const sound = audioPool[currentAudioIndex];
+      sound.currentTime = 0; 
+      sound.volume = 0.25;   
+      
+      sound.play().catch(err => {
+        // Игнорируем блокировки автоплея браузером
+      });
+      
+      currentAudioIndex = (currentAudioIndex + 1) % poolSize;
+    }
+    // ----------------------------------------
+
     const logLines = [
       'INITIALIZING MEOSSY-CORE TERMINAL V2.4.0-RELEASE...',
       '[ INFO ] Checking kernel integrity sub-sectors... <span class="status-ok">SECURE</span>',
@@ -698,6 +719,9 @@
             }
           } else {
             p.innerHTML = '>&nbsp;' + lineText.substring(0, i + 1);
+            if (lineText[i] !== ' ' && lineText[i] !== '&') {
+              playClickSound();
+            }
             i++;
           }
           
@@ -731,7 +755,6 @@
           finalInterface.classList.add('visible');
           setTimeout(() => {
             typeWelcomeText();
-            // Запускаем печать для первой (активной по умолчанию) страницы
             const initialPage = document.querySelector('.page.active');
             typePageContent(initialPage);
           }, 600);
@@ -883,7 +906,6 @@
     /* --- ЛОГИКА ТЕКСТОВОЙ ПЕЧАТИ СТРАНИЦ --- */
     let currentTypeTimeout = null;
 
-    // Сохраняем исходный текст всех страниц при запуске скрипта
     const pagesData = [];
     document.querySelectorAll('.page').forEach(page => {
       const header = page.querySelector('.page-header-title');
@@ -893,17 +915,14 @@
         element: page,
         id: page.getAttribute('data-page'),
         headerText: header.textContent.trim(),
-        // Сохраняем массив строк из тегов <p>
         paragraphs: Array.from(slot.querySelectorAll('p')).map(p => p.innerHTML)
       });
       
-      // Очищаем контент до востребования
       header.textContent = '';
       slot.innerHTML = '';
     });
 
     function typePageContent(pageElement) {
-      // Сбрасываем предыдущие таймауты печати, если кликнули слишком быстро
       if (currentTypeTimeout) clearTimeout(currentTypeTimeout);
 
       const data = pagesData.find(d => d.element === pageElement);
@@ -915,26 +934,27 @@
       headerNode.textContent = '';
       slotNode.innerHTML = '';
 
-      // Базовые тайминги
       const HEADER_SPEED = 40; 
-      const CONTENT_SPEED = HEADER_SPEED / 1.5; // В 1.5 раза быстрее заголовка
+      const CONTENT_SPEED = HEADER_SPEED / 1.5; 
 
       let headerIdx = 0;
       
       function printHeader() {
         if (headerIdx < data.headerText.length) {
           headerNode.textContent += data.headerText[headerIdx];
+          if (data.headerText[headerIdx] !== ' ') {
+            playClickSound();
+          }
           headerIdx++;
           currentTypeTimeout = setTimeout(printHeader, HEADER_SPEED);
         } else {
-          // Заголовок напечатан, переходим к абзацам
           printParagraph(0);
         }
       }
 
       function printParagraph(pIdx) {
         if (pIdx >= data.paragraphs.length) {
-          isTransitioning = false; // Разблокируем интерфейс в самом конце печати
+          isTransitioning = false; 
           return;
         }
 
@@ -946,18 +966,19 @@
 
         function printChar() {
           if (charIdx < text.length) {
-            // Проверка на HTML сущности или теги (на всякий случай)
             if (text[charIdx] === '<') {
               let closeIdx = text.indexOf('>', charIdx);
               pTag.innerHTML = text.substring(0, closeIdx + 1);
               charIdx = closeIdx + 1;
             } else {
               pTag.innerHTML = text.substring(0, charIdx + 1);
+              if (text[charIdx] !== ' ') {
+                playClickSound();
+              }
               charIdx++;
             }
             currentTypeTimeout = setTimeout(printChar, CONTENT_SPEED);
           } else {
-            // Переходим к следующему абзацу
             printParagraph(pIdx + 1);
           }
         }
@@ -971,8 +992,8 @@
     const navButtons = document.querySelectorAll('.nav-square-btn');
     let isTransitioning = false;
 
-    const ANIMATION_DURATION = 200; // Скорость схлопывания .crt-off в CSS
-    const REST_DELAY = 100;         // Пауза перед стартом появления новой страницы
+    const ANIMATION_DURATION = 200; 
+    const REST_DELAY = 100;         
 
     navButtons.forEach(button => {
       button.addEventListener('click', () => {
@@ -986,16 +1007,11 @@
         document.querySelector('.nav-square-btn.active').classList.remove('active');
         button.classList.add('active');
         
-        // Схлопываем текущую страницу (убираем её старый контент)
         currentPage.classList.add('crt-off');
         
         setTimeout(() => {
           currentPage.classList.remove('active', 'crt-off');
-          
-          // Активируем следующую страницу без crt-on анимации
           nextPage.classList.add('active');
-          
-          // Запускаем асинхронную печать текста (заголовок + ускоренный контент)
           typePageContent(nextPage);
           
         }, ANIMATION_DURATION + REST_DELAY); 
