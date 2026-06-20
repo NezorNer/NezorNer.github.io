@@ -503,15 +503,15 @@
       box-shadow: 0 0 15px rgba(181, 142, 203, 0.7);
     }
 
-    /* --- ПОМЕНЯЛ МЕСТАМИ EASE-IN И EASE-OUT --- */
+    /* --- АНИМАЦИИ ВЕРТИКАЛЬНОГО СХЛОПЫВАНИЯ --- */
     .page.crt-off {
       display: flex; 
-      animation: crtCollapse 0.3s ease-out forwards; /* Закрытие: теперь плавное замедление в конце */
+      animation: crtCollapse 0.3s ease-out forwards; /* Изменять скорость (0.3s) тут */
     }
 
     .page.crt-on {
       display: flex;
-      animation: crtExpand 0.3s ease-in forwards;   /* Открытие: теперь плавное ускорение в конце */
+      animation: crtExpand 0.3s ease-in forwards;   /* Изменять скорость (0.3s) тут */
     }
 
     /* Схлопывание по бокам до конца в 0 */
@@ -892,6 +892,13 @@
     const navButtons = document.querySelectorAll('.nav-square-btn');
     let isTransitioning = false;
 
+    // ========================================================
+    // НАСТРОЙКА ТАЙМИНГОВ (Изменяй здесь!)
+    // ========================================================
+    const ANIMATION_DURATION = 300; // Длительность самой CSS-анимации в миллисекундах (0.3 секунды)
+    const REST_DELAY = 500;         // Полсекунды "отдыха" в закрытом состоянии перед открытием (0.5 секунды)
+    // ========================================================
+
     navButtons.forEach(button => {
       button.addEventListener('click', () => {
         if (isTransitioning || button.classList.contains('active')) return;
@@ -907,18 +914,20 @@
         // Схлопываем текущую страницу по горизонтали
         currentPage.classList.add('crt-off');
         
+        // Ждем пока страница полностью закроется (ANIMATION_DURATION) + выдерживаем паузу "отдыха" (REST_DELAY)
         setTimeout(() => {
           currentPage.classList.remove('active', 'crt-off');
           
           // Разворачиваем следующую страницу по горизонтали
           nextPage.classList.add('active', 'crt-on');
           
+          // Ждем завершения анимации открытия, чтобы снять блокировку кликов
           setTimeout(() => {
             nextPage.classList.remove('crt-on');
             isTransitioning = false; 
-          }, 300); 
+          }, ANIMATION_DURATION); 
           
-        }, 300); 
+        }, ANIMATION_DURATION + REST_DELAY); 
       });
     });
   </script>
