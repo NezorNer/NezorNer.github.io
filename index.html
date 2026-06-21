@@ -468,6 +468,30 @@
       justify-content: space-between; 
       align-items: center;
       gap: 20px;
+
+      position: relative; /* Чтобы видеопозиционирование работало корректно */
+      overflow: hidden;   /* Чтобы края видео не вылезали за рамки плеера */
+    }
+
+    /* Стили фонового видео */
+    .player-bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      opacity: 0.25;         /* Полупрозрачность, чтобы интерфейс оставался читаемым */
+      pointer-events: none;  /* Пропускает клики сквозь себя на кнопки */
+    }
+
+    /* Поднимаем элементы управления выше видеофонного слоя */
+    .player-visualizer, 
+    .player-controls, 
+    .timeline-container {
+      position: relative;
+      z-index: 2;
     }
 
     /* Настоящий визуализатор частот (эквалайзер) */
@@ -482,14 +506,12 @@
 
     .visualizer-bar {
       width: 10px;
-      height: 6px; /* Минимальная высота в тишине */
+      height: 6px; 
       background-color: #5d1f7a;
       border-radius: 4px;
-      /* Плавное изменение высоты через JS */
       transition: height 0.05s ease, background-color 0.3s, box-shadow 0.3s;
     }
 
-    /* Стиль полосок при активной музыке (будет светиться зеленым/неоновым) */
     .audio-player.playing .visualizer-bar {
       background-color: #00b06f;
       box-shadow: 0 0 10px rgba(0, 176, 111, 0.5);
@@ -597,7 +619,6 @@
       border-bottom-right-radius: 16px;
     }
 
-    /* Аккуратные кнопки */
     .nav-square-btn {
       width: 38px;
       height: 38px;
@@ -620,7 +641,6 @@
                   color 0.2s ease;
     }
 
-    /* Эффект наведения курсора */
     .nav-square-btn:hover {
       transform: scale(1.05);
       background-color: #4f1b66;
@@ -628,7 +648,6 @@
       box-shadow: 0 0 15px rgba(181, 142, 203, 0.5);
     }
 
-    /* Активное состояние кнопки */
     .nav-square-btn.active {
       background-color: #6a248a;
       color: #ffffff;
@@ -641,7 +660,6 @@
       animation: crtCollapse 0.2s ease-out forwards;
     }
 
-    /* Схлопывание по бокам до конца в 0 */
     @keyframes crtCollapse {
       0% {
         transform: scaleX(1);
@@ -738,6 +756,10 @@
                     
                     <div class="audio-player" id="audioPlayerBlock">
                       
+                      <video id="playerBgVideo" class="player-bg-video" loop muted playsinline>
+                        <source src="background_video.mp4" type="video/mp4">
+                      </video>
+                      
                       <div class="player-visualizer" id="visualizerContainer">
                         <div class="visualizer-bar"></div>
                         <div class="visualizer-bar"></div>
@@ -825,7 +847,7 @@
     // --- НАСТРОЙКА МУЗЫКАЛЬНОГО ПЛЕЕРА И НАСТОЯЩЕГО Web Audio API ЭКВАЛАЙЗЕРА ---
     const myMusic = new Audio('track1.mp3'); 
     myMusic.volume = 0.5; 
-    myMusic.crossOrigin = "anonymous"; // Важно для предотвращения CORS-ошибок аудиоанализатора
+    myMusic.crossOrigin = "anonymous"; 
 
     let audioCtx = null;
     let analyser = null;
@@ -833,31 +855,27 @@
     let source = null;
     let isSeeking = false;
 
-    // Инициализация аудио-контекста Web Audio API после первого клика пользователя
     function initAudioContext() {
-      if (audioCtx) return; // Уже инициализировано
+      if (audioCtx) return; 
       
       try {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 64; // Чем меньше число, тем меньше полос (для нашего эквалайзера идеально)
+        analyser.fftSize = 64; 
         
         const bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
         
-        // Связываем тег Audio с контекстом частот
         source = audioCtx.createMediaElementSource(myMusic);
         source.connect(analyser);
         analyser.connect(audioCtx.destination);
         
-        // Запускаем постоянное считывание спектра частот
         renderRealEqualizer();
       } catch (e) {
-        console.warn("Web Audio API инициализация не удалась (возможно, вы открыли файл без сервера):", e);
+        console.warn("Web Audio API инициализация не удалась:", e);
       }
     }
 
-    // Постоянный цикл обновления высоты полосок эквалайзера в зависимости от трека
     function renderRealEqualizer() {
       requestAnimationFrame(renderRealEqualizer);
       
@@ -865,17 +883,13 @@
       
       analyser.getByteFrequencyData(dataArray);
       
-      // Ищем полоски на текущей активной странице
       const bars = document.querySelectorAll('#visualizerContainer .visualizer-bar');
       if (!bars.length) return;
       
-      // Распределяем частоты по нашим 8 полоскам
       for (let i = 0; i < bars.length; i++) {
-        // Берем частоты с небольшим шагом, пропуская самые глухие верхние шумы
         const dataIndex = Math.floor(i * 1.5); 
         const value = dataArray[dataIndex] || 0;
         
-        // Превращаем частоту (0-255) в высоту полоски в пикселях (макс ~85px)
         const percent = value / 255;
         const height = Math.max(6, percent * 85); 
         
@@ -883,7 +897,6 @@
       }
     }
 
-    // Общие функции форматирования времени
     function formatTime(secs) {
       if (isNaN(secs) || secs === Infinity) return "00:00";
       const m = Math.floor(secs / 60).toString().padStart(2, '0');
@@ -891,7 +904,6 @@
       return `${m}:${s}`;
     }
 
-    // Слушатели событий времени, которые НЕ сбрасываются (глобальные для объекта myMusic)
     myMusic.addEventListener('loadedmetadata', () => {
       const globalTimeline = document.getElementById('timeline');
       const globalTrackTime = document.getElementById('trackTime');
@@ -915,12 +927,13 @@
       const globalPlayIcon = document.getElementById('playIcon');
       const globalTimeline = document.getElementById('timeline');
       const playerBlock = document.getElementById('audioPlayerBlock');
+      const globalVideo = document.getElementById('playerBgVideo');
       
       if (globalPlayIcon) globalPlayIcon.querySelector('path').setAttribute('d', "M8 5v14l11-7z");
       if (globalTimeline) globalTimeline.value = 0;
       if (playerBlock) playerBlock.classList.remove('playing');
+      if (globalVideo) globalVideo.pause(); // Ставим видео на паузу в конце трека
       
-      // Сбрасываем высоты полосок эквалайзера в минимум
       const bars = document.querySelectorAll('#visualizerContainer .visualizer-bar');
       bars.forEach(bar => bar.style.height = '6px');
     });
@@ -1277,8 +1290,8 @@
       const newTimeline = document.getElementById('timeline');
       const newTrackTime = document.getElementById('trackTime');
       const playerBlock = document.getElementById('audioPlayerBlock');
+      const newVideo = document.getElementById('playerBgVideo');
 
-      // Синхронизируем состояние заново воссозданного HTML с текущим состоянием глобального аудио
       newTimeline.max = isNaN(myMusic.duration) ? 0 : myMusic.duration;
       newTimeline.value = myMusic.currentTime;
       newTrackTime.textContent = `${formatTime(myMusic.currentTime)} / ${formatTime(myMusic.duration)}`;
@@ -1287,17 +1300,20 @@
       const pauseSvgPath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
       newPlayIcon.querySelector('path').setAttribute('d', myMusic.paused ? playSvgPath : pauseSvgPath);
 
+      // Синхронизируем состояние видео и стилей при перерисовке страницы
       if (playerBlock) {
         if (myMusic.paused) {
           playerBlock.classList.remove('playing');
+          if (newVideo) newVideo.pause();
         } else {
           playerBlock.classList.add('playing');
+          if (newVideo) newVideo.play().catch(()=>{});
         }
       }
 
       // Клик по кнопке воспроизведения
       newPlayBtn.onclick = () => {
-        initAudioContext(); // Активируем аудио-контекст эквалайзера по первому клику
+        initAudioContext(); 
         
         if (audioCtx && audioCtx.state === 'suspended') {
           audioCtx.resume();
@@ -1307,23 +1323,23 @@
           myMusic.play();
           newPlayIcon.querySelector('path').setAttribute('d', pauseSvgPath);
           if(playerBlock) playerBlock.classList.add('playing');
+          if(newVideo) newVideo.play().catch(()=>{}); // Запускаем видеофоновое
         } else {
           myMusic.pause();
           newPlayIcon.querySelector('path').setAttribute('d', playSvgPath);
           if(playerBlock) playerBlock.classList.remove('playing');
-          // Сбрасываем высоты полосок обратно в минимум при паузе
+          if(newVideo) newVideo.pause(); // Тормозим видеофоновое
+
           const bars = document.querySelectorAll('#visualizerContainer .visualizer-bar');
           bars.forEach(bar => bar.style.height = '6px');
         }
       };
 
-      // Перемотка (пользователь тянет ползунок)
       newTimeline.oninput = () => {
         isSeeking = true;
         newTrackTime.textContent = `${formatTime(newTimeline.value)} / ${formatTime(myMusic.duration)}`;
       };
 
-      // Пользователь отпустил ползунок перемотки
       newTimeline.onchange = () => {
         myMusic.currentTime = newTimeline.value;
         isSeeking = false;
