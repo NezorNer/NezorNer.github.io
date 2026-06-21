@@ -856,7 +856,6 @@
     // ----------------------------------------
 
     // --- НАСТРОЙКА МУЗЫКАЛЬНОГО ПЛЕЕРА И НАСТОЯЩЕГО Web Audio API ЭКВАЛАЙЗЕРА ---
-    // Изменено название файла на track1.mp3
     const myMusic = new Audio('track1.mp3'); 
     myMusic.volume = 0.5; 
     myMusic.crossOrigin = "anonymous"; 
@@ -926,12 +925,18 @@
     myMusic.addEventListener('timeupdate', () => {
       const globalTimeline = document.getElementById('timeline');
       const globalTrackTime = document.getElementById('trackTime');
+      const globalVideo = document.getElementById('playerBgVideo');
       
       if (globalTimeline && !isSeeking) { 
         globalTimeline.value = myMusic.currentTime;
       }
       if (globalTrackTime) {
         globalTrackTime.textContent = `${formatTime(myMusic.currentTime)} / ${formatTime(myMusic.duration)}`;
+      }
+
+      // [ДОБАВЛЕНО] Коррекция рассинхрона видео во время стандартного воспроизведения
+      if (globalVideo && !isSeeking && Math.abs(globalVideo.currentTime - myMusic.currentTime) > 0.25) {
+        globalVideo.currentTime = myMusic.currentTime;
       }
     });
 
@@ -944,7 +949,11 @@
       if (globalPlayIcon) globalPlayIcon.querySelector('path').setAttribute('d', "M8 5v14l11-7z");
       if (globalTimeline) globalTimeline.value = 0;
       if (playerBlock) playerBlock.classList.remove('playing');
-      if (globalVideo) globalVideo.pause(); 
+      
+      if (globalVideo) {
+        globalVideo.pause(); 
+        globalVideo.currentTime = 0; // Сбрасываем видео в начало
+      }
       
       const bars = document.querySelectorAll('#visualizerContainer .visualizer-bar');
       bars.forEach(bar => bar.style.height = '6px');
@@ -1249,7 +1258,6 @@
           headerIdx++;
           currentTypeTimeout = setTimeout(printHeader, HEADER_SPEED);
         } else {
-          // Заголовок завершил печать! Запускаем наполнение контента
           printParagraph(0);
         }
       }
@@ -1262,7 +1270,6 @@
             slotNode.appendChild(tempDiv.firstElementChild);
             bindPlayerEvents(); 
             
-            // Плавное появление плеера сразу после того, как он добавлен на страницу
             setTimeout(() => {
               const playerEl = document.getElementById('audioPlayerBlock');
               if (playerEl) playerEl.classList.add('fade-in-active');
@@ -1352,13 +1359,21 @@
         }
       };
 
+      // [ОБНОВЛЕНО] Перемотка видео в реальном времени при зажатии и движении ползунка
       newTimeline.oninput = () => {
         isSeeking = true;
         newTrackTime.textContent = `${formatTime(newTimeline.value)} / ${formatTime(myMusic.duration)}`;
+        if (newVideo) {
+          newVideo.currentTime = newTimeline.value;
+        }
       };
 
+      // [ОБНОВЛЕНО] Фиксация времени музыки и видео при отпускании ползунка
       newTimeline.onchange = () => {
         myMusic.currentTime = newTimeline.value;
+        if (newVideo) {
+          newVideo.currentTime = newTimeline.value;
+        }
         isSeeking = false;
       };
     }
