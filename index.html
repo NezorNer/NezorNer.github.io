@@ -469,8 +469,19 @@
       align-items: center;
       gap: 20px;
 
-      position: relative; /* Чтобы видеопозиционирование работало корректно */
-      overflow: hidden;   /* Чтобы края видео не вылезали за рамки плеера */
+      position: relative; 
+      overflow: hidden;   
+
+      /* Изначальное состояние для плавного появления */
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    /* Класс, который JS добавит после завершения анимации текста */
+    .audio-player.fade-in-active {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* Стили фонового видео */
@@ -482,8 +493,8 @@
       height: 100%;
       object-fit: cover;
       z-index: 1;
-      opacity: 0.25;         /* Полупрозрачность, чтобы интерфейс оставался читаемым */
-      pointer-events: none;  /* Пропускает клики сквозь себя на кнопки */
+      opacity: 0.25;         
+      pointer-events: none;  
     }
 
     /* Поднимаем элементы управления выше видеофонного слоя */
@@ -779,7 +790,7 @@
                         </button>
                         
                         <div class="track-info">
-                          <span class="track-title">vaultboy - Everything sucks(sped up)</span>
+                          <span class="track-title">vaultboy - Everything sucks(Nightcore)</span>
                           <span class="track-time" id="trackTime">00:00 / 00:00</span>
                         </div>
                       </div>
@@ -845,6 +856,7 @@
     // ----------------------------------------
 
     // --- НАСТРОЙКА МУЗЫКАЛЬНОГО ПЛЕЕРА И НАСТОЯЩЕГО Web Audio API ЭКВАЛАЙЗЕРА ---
+    // Изменено название файла на track1.mp3
     const myMusic = new Audio('track1.mp3'); 
     myMusic.volume = 0.5; 
     myMusic.crossOrigin = "anonymous"; 
@@ -932,7 +944,7 @@
       if (globalPlayIcon) globalPlayIcon.querySelector('path').setAttribute('d', "M8 5v14l11-7z");
       if (globalTimeline) globalTimeline.value = 0;
       if (playerBlock) playerBlock.classList.remove('playing');
-      if (globalVideo) globalVideo.pause(); // Ставим видео на паузу в конце трека
+      if (globalVideo) globalVideo.pause(); 
       
       const bars = document.querySelectorAll('#visualizerContainer .visualizer-bar');
       bars.forEach(bar => bar.style.height = '6px');
@@ -1237,6 +1249,7 @@
           headerIdx++;
           currentTypeTimeout = setTimeout(printHeader, HEADER_SPEED);
         } else {
+          // Заголовок завершил печать! Запускаем наполнение контента
           printParagraph(0);
         }
       }
@@ -1248,6 +1261,12 @@
             tempDiv.innerHTML = data.extraHTML;
             slotNode.appendChild(tempDiv.firstElementChild);
             bindPlayerEvents(); 
+            
+            // Плавное появление плеера сразу после того, как он добавлен на страницу
+            setTimeout(() => {
+              const playerEl = document.getElementById('audioPlayerBlock');
+              if (playerEl) playerEl.classList.add('fade-in-active');
+            }, 50);
           }
           isTransitioning = false; 
           return;
@@ -1277,13 +1296,13 @@
             printParagraph(pIdx + 1);
           }
         }
+        charIdx = 0;
         printChar();
       }
 
       printHeader();
     }
 
-    // Привязка динамических событий к плееру при каждой отрисовке страницы 2
     function bindPlayerEvents() {
       const newPlayBtn = document.getElementById('playBtn');
       const newPlayIcon = document.getElementById('playIcon');
@@ -1300,7 +1319,6 @@
       const pauseSvgPath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
       newPlayIcon.querySelector('path').setAttribute('d', myMusic.paused ? playSvgPath : pauseSvgPath);
 
-      // Синхронизируем состояние видео и стилей при перерисовке страницы
       if (playerBlock) {
         if (myMusic.paused) {
           playerBlock.classList.remove('playing');
@@ -1311,7 +1329,6 @@
         }
       }
 
-      // Клик по кнопке воспроизведения
       newPlayBtn.onclick = () => {
         initAudioContext(); 
         
@@ -1323,12 +1340,12 @@
           myMusic.play();
           newPlayIcon.querySelector('path').setAttribute('d', pauseSvgPath);
           if(playerBlock) playerBlock.classList.add('playing');
-          if(newVideo) newVideo.play().catch(()=>{}); // Запускаем видеофоновое
+          if(newVideo) newVideo.play().catch(()=>{}); 
         } else {
           myMusic.pause();
           newPlayIcon.querySelector('path').setAttribute('d', playSvgPath);
           if(playerBlock) playerBlock.classList.remove('playing');
-          if(newVideo) newVideo.pause(); // Тормозим видеофоновое
+          if(newVideo) newVideo.pause(); 
 
           const bars = document.querySelectorAll('#visualizerContainer .visualizer-bar');
           bars.forEach(bar => bar.style.height = '6px');
